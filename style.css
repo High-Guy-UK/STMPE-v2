@@ -330,15 +330,23 @@ input:focus,select:focus,textarea:focus{
 select{background-image:linear-gradient(45deg,transparent 50%,var(--text-2) 50%),linear-gradient(135deg,var(--text-2) 50%,transparent 50%);
   background-position:calc(100% - 16px) 52%,calc(100% - 11px) 52%;background-size:5px 5px,5px 5px;background-repeat:no-repeat;padding-right:30px;}
 
-input[type=submit],button,.button,input[type=button],a.button,.submit{
+input[type=submit],button,.button,input[type=button],input.submit,button.submit,a.button{
   cursor:pointer;font-family:var(--fd);font-weight:600;font-size:12.5px;letter-spacing:.01em;
   padding:9px 18px;border-radius:11px;border:1px solid transparent;
   background:var(--grad-accent);color:#04121f;box-shadow:0 6px 18px rgba(31,120,235,.3);
   transition:.15s;
 }
-input[type=submit]:hover,button:hover,.button:hover,a.button:hover,.submit:hover{
+input[type=submit]:hover,button:hover,.button:hover,a.button:hover{
   filter:brightness(1.08);transform:translateY(-1px);box-shadow:0 10px 24px rgba(31,120,235,.4);
 }
+/* submit/action row container (NOT a button) */
+div.submit,.submit_row,.linkbox_submit{
+  display:flex;align-items:center;gap:12px;flex-wrap:wrap;
+  margin-top:12px;padding:12px 14px;border-radius:12px;
+  background:var(--bg-1);border:1px solid var(--line);
+}
+div.submit{color:var(--text-2);font-weight:500;}
+div.submit b,div.submit strong{color:var(--text);}
 /* secondary buttons */
 button.secondary,.button.secondary,input.secondary{
   background:var(--bg-3);color:var(--text);border:1px solid var(--line-2);box-shadow:none;
