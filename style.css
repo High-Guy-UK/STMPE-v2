@@ -256,13 +256,22 @@ hr{border:0;border-top:1px solid var(--line);margin:14px 0;}
 .filter_torrents table,.search_form table{width:100%;background:none;border:0;}
 .filter_torrents td,.filter_torrents th,.search_form td,.search_form th{border:0;background:none !important;padding:6px 8px;vertical-align:middle;}
 .filter_torrents td.label,.filter_torrents .label{color:var(--text-2);font-style:normal;font-weight:500;}
-/* tag toggle buttons */
-.filter_torrents td a,.tags a,a.tag_selected,.filter_torrents .tag{
-  display:block;text-align:center;padding:8px 10px;border-radius:9px;
-  border:1px solid var(--line-2);background:var(--bg-1);color:var(--text-1);font-size:12px;transition:.15s;
+/* tag toggle pills: [+] name [-] */
+.filter_torrents .tag_container{display:flex;flex-wrap:wrap;gap:8px;}
+.filter_torrents .outline{
+  display:inline-flex;align-items:center;gap:1px;padding:1px;
+  border:1px solid var(--line-2);background:var(--bg-1);border-radius:999px;transition:.15s;
 }
-.filter_torrents td a:hover,.tags a:hover{border-color:var(--accent-line);background:var(--accent-soft);color:#fff;}
-a.tag_selected,.tag_selected{background:var(--grad-accent-soft) !important;border-color:var(--accent-line) !important;color:#fff !important;}
+.filter_torrents .outline:hover{border-color:var(--accent-line);box-shadow:0 0 0 3px var(--accent-soft);}
+.filter_torrents .outline a{
+  display:inline-flex;align-items:center;justify-content:center;border:0;background:none;
+  padding:5px 7px;border-radius:999px;color:var(--text-3);font-size:12px;line-height:1;
+}
+.filter_torrents .outline a.tag-text{padding:5px 11px;color:var(--text-1);font-weight:500;}
+.filter_torrents .outline a:hover{color:#fff;background:var(--accent-soft);}
+.filter_torrents .outline a .fa-plus-circle,.filter_torrents .outline a:first-child{color:var(--good);}
+.filter_torrents .outline a .fa-minus-circle,.filter_torrents .outline a:last-child{color:var(--bad);}
+.filter_torrents .outline a.tag-text:hover{color:var(--accent-bright);background:none;}
 
 /* ==========================================================================
    TABLES
