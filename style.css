@@ -565,22 +565,43 @@ body#forums #content table td{vertical-align:middle;}
 /* ==========================================================================
    SERIES PAGE — top row (pills left / banner right) + 2-column body
    ========================================================================== */
-body#series #content .thin{display:grid;grid-template-columns:340px minmax(0,1fr);gap:22px 26px;align-items:start;}
-/* top row */
+/* Hero up top (poster + banner + Series Info + blue-star rating), then a
+   2-column body (torrents wide-left, remaining panels in a right rail).
+   The .sidebar is dissolved with display:contents so its boxes become grid
+   items of .thin and can be placed individually. */
+body#series #content .thin{
+  display:grid;
+  grid-template-columns:172px minmax(0,1fr) 296px;
+  grid-auto-rows:min-content;
+  gap:14px 20px;align-items:start;
+}
+body#series #content .thin>.sidebar{display:contents;}
+
+/* --- HERO --- */
+/* poster card: far left, spanning the hero rows */
+body#series #content .thin>.sidebar>.box:nth-child(1){grid-column:1;grid-row:1 / span 3;margin:0;width:auto;}
+body#series #content .thin>.sidebar>.box:nth-child(1) img{width:100% !important;height:auto !important;border-radius:0 0 10px 10px;display:block;}
+/* banner: top, crisp + left-aligned flush with the info panel below it */
+body#series #content .thin>center{grid-column:2 / 4;grid-row:1;margin:0;line-height:0;text-align:left;}
+body#series #content .thin>center>div{margin:0;display:inline-block;max-width:100%;}
+body#series #content .thin>center>div img{height:118px !important;width:auto !important;max-width:100% !important;border-radius:12px;display:block;}
+/* Series Info: compact 2-column layout (the rows live in a <table>) */
+body#series #content .thin>.sidebar>.box:nth-child(2){grid-column:2 / 4;grid-row:2;margin:0;width:auto;}
+body#series #content .thin>.sidebar>.box:nth-child(2) table{display:block;width:100%;border:0;}
+body#series #content .thin>.sidebar>.box:nth-child(2) table tbody{display:grid;grid-template-columns:1fr 1fr;column-gap:30px;}
+body#series #content .thin>.sidebar>.box:nth-child(2) table tr{display:flex;justify-content:space-between;align-items:center;gap:12px;border:0;background:none;}
+body#series #content .thin>.sidebar>.box:nth-child(2) table td{display:inline;border:0;background:none;padding:6px 0;white-space:nowrap;}
+/* Series Rating: below the info */
+body#series #content .thin>.sidebar>.box:nth-child(3){grid-column:2 / 4;grid-row:3;margin:0;width:auto;}
+/* action pills: full-width row under the hero */
 body#series #content .thin>.linkbox{
-  grid-column:1 / -1;grid-row:1;align-self:center;margin:0;
-  display:flex;flex-wrap:wrap;gap:10px;justify-content:center;align-items:center;
-  padding-right:640px; /* reserve the banner's space so pills centre in the area beside it */
+  grid-column:1 / -1;grid-row:4;margin:0;padding-right:0;
+  display:flex;flex-wrap:wrap;gap:10px;align-items:center;
 }
-body#series #content .thin>.linkbox a{white-space:nowrap;margin:0;text-align:center;}
-body#series #content .thin>center{grid-column:1 / -1;grid-row:1;justify-self:end;align-self:center;margin:0;line-height:0;}
-body#series #content .thin>center>div{margin:0 auto;}
-body#series #content .thin>center>div img{
-  height:112px !important;width:auto !important;max-width:100% !important;border-radius:10px;display:block;
-}
-/* body: info sidebar left, torrents right */
-body#series #content .thin>.sidebar{grid-column:1;grid-row:2;width:auto !important;margin:0 !important;}
-body#series #content .thin>.main_column{grid-column:2;grid-row:2;min-width:0;width:auto !important;margin:0 !important;}
+body#series #content .thin>.linkbox a{white-space:nowrap;margin:0;}
+/* body: torrents wide on the left, remaining panels stack in the right rail */
+body#series #content .thin>.main_column{grid-column:1 / 3;grid-row:5 / span 80;min-width:0;width:auto !important;margin:0 !important;}
+body#series #content .thin>.sidebar>.box:nth-child(n+4){grid-column:3;margin:0;width:auto;}
 
 /* Series Rating -> blue stars (hide the power-button sprite + raw radios) */
 body#series .rating,body#series .rating-bg{display:none !important;}
@@ -615,15 +636,15 @@ body#series .star-rating:has(.rb10:checked) label.star:nth-of-type(-n+11)::befor
 @media (max-width:1000px){
   .thin.home{display:block !important;}
   .thin.home .sidebar{margin-bottom:22px !important;}
-  /* series page: collapse to a single column */
-  body#series #content .thin{grid-template-columns:1fr !important;}
-  body#series #content .thin>.linkbox,
-  body#series #content .thin>center,
-  body#series #content .thin>.sidebar,
-  body#series #content .thin>.main_column{grid-column:1 !important;grid-row:auto !important;justify-self:stretch !important;}
-  body#series #content .thin>center{justify-self:center !important;margin:8px 0 !important;}
-  body#series #content .thin>.linkbox{padding-right:0 !important;}
-  body#series #content .thin>.sidebar{margin-bottom:22px !important;}
+  /* series page: unwind the hero grid into a simple stacked column */
+  body#series #content .thin{display:block !important;}
+  body#series #content .thin>.sidebar{display:block !important;}
+  body#series #content .thin>.sidebar>.box{margin:0 0 14px !important;width:auto !important;}
+  body#series #content .thin>.sidebar>.box:nth-child(1) img{width:auto !important;max-width:220px;border-radius:10px !important;}
+  body#series #content .thin>.sidebar>.box:nth-child(2) table tbody{grid-template-columns:1fr !important;}
+  body#series #content .thin>center{text-align:center !important;margin:10px 0 !important;}
+  body#series #content .thin>.main_column{width:auto !important;margin:0 !important;}
+  body#series #content .thin>.linkbox{padding-right:0 !important;justify-content:center !important;}
 }
 @media (max-width:760px){
   body{font-size:13px;}
