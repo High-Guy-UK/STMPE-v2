@@ -261,11 +261,12 @@ hr{border:0;border-top:1px solid var(--line);margin:14px 0;}
 /* sidebar "Last 5 Uploads" poster etc. */
 .sidebar .box img{border-radius:10px;}
 .sidebar .pad{padding:14px;}
-/* sidebar panels: give the content real inner padding (text was flush to the edge) */
-.sidebar .box>div:not(.head){padding-left:16px;padding-right:16px;}
-.sidebar .box>div:not(.head):last-child{padding-bottom:14px;}
-.sidebar .box>.head+div{padding-top:12px;}
-.sidebar .box ul{margin:0;}
+/* sidebar panels: give the content real inner padding (lists sit as DIRECT children,
+   so they need padding directly — a div-only rule missed them) */
+.sidebar .box>div:not(.head){padding-left:18px;padding-right:18px;}
+.sidebar .box>ul,.sidebar .box>ol{padding:8px 18px !important;margin:0 !important;list-style:none;}
+.sidebar .box>.head+ul,.sidebar .box>.head+ol,.sidebar .box>.head+div{padding-top:12px;}
+.sidebar .box>*:last-child{padding-bottom:14px;}
 
 /* ==========================================================================
    TORRENTS FILTER / SEARCH FORM
