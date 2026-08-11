@@ -563,6 +563,26 @@ body#forums #content table td{vertical-align:middle;}
 .home .main_column>.box>ul.stats li{line-height:1.7;padding:1px 0;}
 
 /* ==========================================================================
+   SERIES PAGE — top row (pills left / banner right) + 2-column body
+   ========================================================================== */
+body#series #content .thin{display:grid;grid-template-columns:340px minmax(0,1fr);gap:22px 26px;align-items:start;}
+/* top row */
+body#series #content .thin>.linkbox{
+  grid-column:1 / -1;grid-row:1;align-self:center;margin:0;
+  display:flex;flex-wrap:wrap;gap:10px;justify-content:center;align-items:center;
+  padding-right:640px; /* reserve the banner's space so pills centre in the area beside it */
+}
+body#series #content .thin>.linkbox a{white-space:nowrap;margin:0;text-align:center;}
+body#series #content .thin>center{grid-column:1 / -1;grid-row:1;justify-self:end;align-self:center;margin:0;line-height:0;}
+body#series #content .thin>center>div{margin:0 auto;}
+body#series #content .thin>center>div img{
+  height:112px !important;width:auto !important;max-width:100% !important;border-radius:10px;display:block;
+}
+/* body: info sidebar left, torrents right */
+body#series #content .thin>.sidebar{grid-column:1;grid-row:2;width:auto !important;margin:0 !important;}
+body#series #content .thin>.main_column{grid-column:2;grid-row:2;min-width:0;width:auto !important;margin:0 !important;}
+
+/* ==========================================================================
    RESPONSIVE
    ========================================================================== */
 @media (max-width:1100px){
@@ -571,6 +591,15 @@ body#forums #content table td{vertical-align:middle;}
 @media (max-width:1000px){
   .thin.home{display:block !important;}
   .thin.home .sidebar{margin-bottom:22px !important;}
+  /* series page: collapse to a single column */
+  body#series #content .thin{grid-template-columns:1fr !important;}
+  body#series #content .thin>.linkbox,
+  body#series #content .thin>center,
+  body#series #content .thin>.sidebar,
+  body#series #content .thin>.main_column{grid-column:1 !important;grid-row:auto !important;justify-self:stretch !important;}
+  body#series #content .thin>center{justify-self:center !important;margin:8px 0 !important;}
+  body#series #content .thin>.linkbox{padding-right:0 !important;}
+  body#series #content .thin>.sidebar{margin-bottom:22px !important;}
 }
 @media (max-width:760px){
   body{font-size:13px;}
