@@ -156,17 +156,18 @@ hr{border:0;border-top:1px solid var(--line);margin:14px 0;}
 #nav_upload,#userinfo_minor li a[href*="upload"]{color:#fff;}
 #userinfo_minor li a[href*="donate"]{color:var(--gold);}
 
-/* donation drive: clear labelled chip on its own line, aligned right */
+/* donation drive: clear labelled chip on its own line under the logo */
 #donation{
-  order:3;flex:0 0 100%;width:100%;margin:8px 0 -4px;padding:0 2px 0 0;
-  display:block;text-align:right;
-  background:none;border:0;
+  order:3;flex:0 0 100%;width:100%;margin:8px 0 -2px;padding:0;
+  display:block;text-align:left;
+  background:none;border:0;line-height:1.4;
   font-size:11px;font-weight:600;color:var(--text-2);letter-spacing:.01em;
 }
+#donation *{display:inline !important;float:none !important;background:none !important;border:0 !important;width:auto !important;height:auto !important;padding:0 !important;margin:0 !important;box-shadow:none !important;}
+#donation img{display:none !important;}
 #donation::before{
-  font-family:'MS';content:'\ea70';font-size:14px;color:var(--gold);vertical-align:-2px;margin-right:5px;
+  font-family:'MS';content:'\ea70';font-size:14px;color:var(--gold);vertical-align:-2px;margin-right:6px;
 }
-#donation>div{display:inline !important;}
 #donation a{color:var(--text-1) !important;}
 /* the native bar is built from <img> graphics; hide those, keep the clear text label */
 #donation img{display:none !important;}
