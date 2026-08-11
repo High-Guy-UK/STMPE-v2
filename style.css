@@ -14,6 +14,10 @@
   font-family:'Space Grotesk';font-style:normal;font-weight:300 700;font-display:swap;
   src:url('fonts/space-grotesk.woff2') format('woff2');
 }
+@font-face{
+  font-family:'MS';font-style:normal;font-weight:400;font-display:block;
+  src:url('fonts/icons.woff2') format('woff2');
+}
 
 /* ---------- Design tokens ---------- */
 :root{
@@ -99,7 +103,7 @@ hr{border:0;border-top:1px solid var(--line);margin:14px 0;}
    HEADER
    ========================================================================== */
 #header{
-  position:relative;width:100%;margin:0 auto;max-width:none;
+  position:relative;z-index:900;width:100%;margin:0 auto;max-width:none;
   display:flex;flex-wrap:wrap;align-items:center;gap:14px 20px;
   padding:16px clamp(16px,3vw,40px) 0;
   background:linear-gradient(180deg,rgba(15,18,23,.92),rgba(10,12,15,.75));
@@ -152,12 +156,22 @@ hr{border:0;border-top:1px solid var(--line);margin:14px 0;}
 #nav_upload,#userinfo_minor li a[href*="upload"]{color:#fff;}
 #userinfo_minor li a[href*="donate"]{color:var(--gold);}
 
-/* donation ratio bar */
-#donation{order:4;flex:0 0 100%;margin:2px 0 0;}
-#donation div, .donation_bar{
-  height:6px;border-radius:6px;background:var(--bg-3);overflow:hidden;position:relative;
+/* donation drive widget: label + progress bar in a subtle pill */
+#donation{
+  order:4;flex:0 0 auto;margin:2px 0 0;
+  display:inline-flex;align-items:center;gap:10px;
+  padding:6px 12px 6px 12px;border-radius:999px;
+  background:var(--bg-2);border:1px solid var(--line);
+  font-size:11px;font-weight:600;color:var(--text-1);letter-spacing:.01em;white-space:nowrap;
 }
-#donation div>*{background:var(--grad-accent) !important;height:100%;display:block;}
+#donation::before{
+  font-family:'MS';content:'\ea70';font-size:15px;color:var(--gold);margin-right:-2px;
+}
+#donation div,.donation_bar{
+  width:150px;height:7px;border-radius:6px;background:var(--bg-4);
+  overflow:hidden;position:relative;border:1px solid var(--line-2);
+}
+#donation div>*{background:var(--grad-accent) !important;height:100%;display:block;box-shadow:0 0 10px rgba(63,200,255,.55);}
 
 /* ---------- Main nav (potato menu) ---------- */
 #menu{order:5;flex:0 0 100%;margin:14px 0 0;}
@@ -176,14 +190,14 @@ hr{border:0;border-top:1px solid var(--line);margin:14px 0;}
 }
 /* dropdown flyouts */
 #menu1 ul,#menu1 .subnav,.potato-menu ul{
-  position:absolute;left:0;top:calc(100% + 8px);min-width:210px;z-index:120;
-  list-style:none;margin:0;padding:7px;display:none;
-  background:var(--panel);border:1px solid var(--line-2);border-radius:14px;
+  position:absolute;left:0;top:100%;min-width:210px;z-index:600;
+  list-style:none;margin:0;padding:12px 8px 8px;display:none;
+  background:#0c0e12;border:1px solid var(--line-2);border-radius:14px;
   box-shadow:var(--shadow);
 }
 #menu1>li:hover>ul,.potato-menu li:hover>ul{display:block;}
-#menu1 ul::before{content:"";position:absolute;top:-6px;left:20px;width:10px;height:10px;
-  background:var(--bg-2);border-left:1px solid var(--line-2);border-top:1px solid var(--line-2);transform:rotate(45deg);}
+/* transparent hover-bridge so the cursor can travel into the flyout */
+#menu1>li>ul::before{content:"";position:absolute;top:-10px;left:0;right:0;height:12px;background:transparent;}
 #menu1 ul li a{
   display:block;padding:8px 12px;border-radius:9px;color:var(--text-1);font-size:12.5px;font-weight:400;
 }
@@ -399,6 +413,89 @@ img.tooltip,.brackets_around{border-radius:8px;}
 
 /* colored user classes keep their color but ensure readable weight */
 [class*="permission_"],a[class*="permission_"]{font-weight:600;}
+
+/* ==========================================================================
+   TOPBAR ICONS (Google Material Symbols, self-hosted subset)
+   ========================================================================== */
+#userinfo .mi,#userinfo [class].__ms{font-family:'MS';}
+/* username keeps its text, gains a person mark */
+#userinfo_username>li:nth-child(1) a::before{
+  font-family:'MS';content:'\f20b';font-size:16px;margin-right:6px;vertical-align:-3px;color:var(--accent-bright);
+}
+/* action items: swap the word for an icon (Edit / Logout / Upload / Invite / Donate) */
+#userinfo_username>li:nth-child(2) a,
+#userinfo_username>li:nth-child(3) a,
+#userinfo_major>li:nth-child(1) a,
+#userinfo_major>li:nth-child(2) a,
+#userinfo_major>li:nth-child(3) a{
+  font-size:0 !important;line-height:0;display:inline-flex;align-items:center;justify-content:center;
+}
+#userinfo_username>li:nth-child(2) a::before,
+#userinfo_username>li:nth-child(3) a::before,
+#userinfo_major>li:nth-child(1) a::before,
+#userinfo_major>li:nth-child(2) a::before,
+#userinfo_major>li:nth-child(3) a::before{
+  font-family:'MS';font-size:19px;line-height:1;color:var(--text-1);transition:color .15s;
+}
+#userinfo_username>li:nth-child(2) a::before{content:'\f097';} /* edit */
+#userinfo_username>li:nth-child(3) a::before{content:'\e9ba';} /* logout */
+#userinfo_major>li:nth-child(1) a::before{content:'\f09b';}    /* upload */
+#userinfo_major>li:nth-child(2) a::before{content:'\e7f0';}    /* invite */
+#userinfo_major>li:nth-child(3) a::before{content:'\ea70';color:var(--gold);} /* donate */
+#userinfo_username>li a:hover::before,#userinfo_major>li a:hover::before{color:#fff;}
+#userinfo_major>li:nth-child(3) a:hover::before{color:var(--warn);}
+/* keep a hover tooltip of the original label for discoverability */
+#userinfo_major>li a,#userinfo_username>li:nth-child(2) a,#userinfo_username>li:nth-child(3) a{position:relative;}
+
+/* stat pills: swap the label word for an icon, keep the value */
+#userinfo_stats>li{font-size:0 !important;gap:0;}
+#userinfo_stats>li>.stat,#userinfo_stats>li>a{font-size:11.5px !important;font-weight:600;color:var(--text);}
+#userinfo_stats>li::before{
+  font-family:'MS';font-size:15px;margin-right:5px;vertical-align:-2px;color:var(--accent-bright);
+}
+#userinfo_stats>li:nth-child(1)::before{content:'\e2c3';} /* cloud_upload  → Up */
+#userinfo_stats>li:nth-child(2)::before{content:'\e51d';color:var(--warn);} /* running_with_errors → H&Rs */
+#userinfo_stats>li:nth-child(3)::before{content:'\e8e0';} /* toll → Bonus */
+#userinfo_stats>li:nth-child(4)::before{content:'\e90f';color:var(--gold);} /* lightbulb → Lumens */
+
+/* ==========================================================================
+   PAGINATION + TAB ACTIVE STATE (stronger current-page contrast)
+   ========================================================================== */
+.linkbox strong,.pages strong,.linkbox a.selected,.pages .page_current,
+.linkbox_link.selected,.tabs .selected,ul.subnav li.selected a,.sidebar_box li.selected{
+  background:var(--grad-accent) !important;color:#04121f !important;border:1px solid transparent !important;
+  box-shadow:0 0 16px rgba(63,200,255,.5) !important;font-weight:700 !important;
+}
+/* de-emphasise non-current page pills so the active one pops */
+.linkbox a,.pages a{background:var(--bg-2);border:1px solid var(--line);color:var(--text-2);}
+.linkbox a:hover,.pages a:hover{color:#fff;}
+/* profile / section tab strip active item */
+.linkbox a.selected,.head+.linkbox a.selected{color:#04121f !important;}
+
+/* ==========================================================================
+   TORRENT TABLE — cover art thumbnails + compact rows
+   ========================================================================== */
+/* surface the TVDB cover art (was collapsed to 0x0) as a neat banner thumbnail */
+#torrent_table td img[width="170"],#torrent_table td img[width="220"]{
+  display:block !important;width:132px !important;height:44px !important;
+  object-fit:cover;object-position:left center;border-radius:8px;
+  border:1px solid var(--line-2);box-shadow:var(--shadow-sm);
+}
+#torrent_table tr.torrent>td:nth-child(2){width:132px;padding:6px 8px;vertical-align:middle;}
+#torrent_table tr.torrent>td:nth-child(2) a{display:inline-block;line-height:0;}
+
+/* compact the info cell: pull format up onto the title line, put uploader + release on one line */
+#torrent_table tr.torrent>td{padding-top:7px;padding-bottom:7px;vertical-align:middle;}
+#torrent_table tr.torrent>td:nth-child(3){line-height:1.4;}
+#torrent_table tr.torrent>td:nth-child(3)>br{display:none;} /* title & format share a line */
+#torrent_table tr.torrent>td:nth-child(3)>strong,
+#torrent_table tr.torrent>td:nth-child(3)>abbr{margin-left:7px;font-size:11px;color:var(--text-2);}
+#torrent_table tr.torrent>td:nth-child(3)>div.nobr{
+  display:inline;font-size:11px;color:var(--text-2);
+}
+#torrent_table tr.torrent>td:nth-child(3)>div.nobr:first-of-type::before{content:"";display:block;height:2px;} /* start a 2nd line */
+#torrent_table tr.torrent>td:nth-child(3)>div.nobr+div.nobr::before{content:"•";margin:0 8px;color:var(--text-3);}
+#torrent_table tr.torrent>td:nth-child(3) b{color:var(--text-3);font-weight:500;}
 
 /* ==========================================================================
    RESPONSIVE
