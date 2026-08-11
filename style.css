@@ -582,6 +582,30 @@ body#series #content .thin>center>div img{
 body#series #content .thin>.sidebar{grid-column:1;grid-row:2;width:auto !important;margin:0 !important;}
 body#series #content .thin>.main_column{grid-column:2;grid-row:2;min-width:0;width:auto !important;margin:0 !important;}
 
+/* Series Rating -> blue stars (hide the power-button sprite + raw radios) */
+body#series .rating,body#series .rating-bg{display:none !important;}
+body#series .star-rating{line-height:1;white-space:nowrap;}
+body#series .star-rating input{display:none !important;}
+body#series .star-rating label.star{
+  width:auto !important;height:auto !important;position:static !important;float:none !important;
+  text-indent:0 !important;overflow:visible !important;margin:0 !important;
+}
+body#series .star-rating label.star.rb0l,body#series .star-rating label.rb{display:none !important;}
+body#series .star-rating label.star::before{content:'\2605';font-size:20px;color:#3a414c;letter-spacing:1px;}
+body#series .star-rating:has(.rb0:checked) label.star:nth-of-type(-n+1)::before,
+body#series .star-rating:has(.rb1:checked) label.star:nth-of-type(-n+2)::before,
+body#series .star-rating:has(.rb2:checked) label.star:nth-of-type(-n+3)::before,
+body#series .star-rating:has(.rb3:checked) label.star:nth-of-type(-n+4)::before,
+body#series .star-rating:has(.rb4:checked) label.star:nth-of-type(-n+5)::before,
+body#series .star-rating:has(.rb5:checked) label.star:nth-of-type(-n+6)::before,
+body#series .star-rating:has(.rb6:checked) label.star:nth-of-type(-n+7)::before,
+body#series .star-rating:has(.rb7:checked) label.star:nth-of-type(-n+8)::before,
+body#series .star-rating:has(.rb8:checked) label.star:nth-of-type(-n+9)::before,
+body#series .star-rating:has(.rb9:checked) label.star:nth-of-type(-n+10)::before,
+body#series .star-rating:has(.rb10:checked) label.star:nth-of-type(-n+11)::before{
+  color:#3fc8ff !important;text-shadow:0 0 8px rgba(63,200,255,.55);
+}
+
 /* ==========================================================================
    RESPONSIVE
    ========================================================================== */
