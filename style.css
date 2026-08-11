@@ -518,6 +518,31 @@ body#forums #content table td{vertical-align:middle;}
 #torrent_table tr.torrent>td:nth-child(3) b{color:var(--text-3);font-weight:500;}
 
 /* ==========================================================================
+   HOMEPAGE "OF THE MONTH" — compact side-by-side landscape cards, moved to
+   the bottom of the main column. (CSS can't re-parent into the sidebar, so
+   they live at the end of the main column instead.)
+   ========================================================================== */
+.home .main_column{display:flex;flex-direction:column;}
+.home .main_column>.of_the_month{order:10;margin-top:0;}
+.of_the_month{display:flex;flex-direction:row;gap:18px;align-items:flex-start;}
+.of_the_month>div:empty{display:none;}
+.of_the_month>.box{flex:1 1 0;min-width:0;margin:0;}
+.of_the_month .box>ul.stats{display:flex;flex-direction:row;gap:0;padding:0;margin:0;list-style:none;align-items:stretch;}
+.of_the_month .box>ul.stats>li,.of_the_month .box>ul.stats>div{margin:0;padding:0;border:0;list-style:none;}
+.of_the_month .box>ul.stats>div{display:none !important;} /* empty trailing div */
+.of_the_month .box>ul.stats>li:nth-child(1){flex:0 0 106px;width:106px;overflow:hidden;background:#000;}
+.of_the_month .box>ul.stats>li:nth-child(1) center,.of_the_month .box>ul.stats>li:nth-child(1) a{display:block;height:100%;line-height:0;}
+.of_the_month .box>ul.stats>li:nth-child(1) img{width:106px !important;height:100% !important;min-height:130px;max-width:none !important;object-fit:cover;object-position:center top;display:block;}
+.of_the_month .box>ul.stats>li:nth-child(2){flex:1;min-width:0;padding:13px 15px;font-size:12px;}
+.of_the_month .box>ul.stats>li:nth-child(2) b{font-size:13.5px;color:var(--text);display:block;margin-bottom:7px;line-height:1.3;}
+.of_the_month .month_rating{display:inline-block;background:var(--grad-accent);color:#04121f;font-weight:700;padding:2px 8px;border-radius:7px;font-size:12px;margin-bottom:7px;}
+/* actor card (2nd): hide empty rating badge, cap filmography at 5 titles */
+.of_the_month>.box+.box .month_rating{display:none !important;}
+.of_the_month>.box+.box ul.stats>li:nth-child(2) br{display:none !important;}
+.of_the_month>.box+.box ul.stats>li:nth-child(2) a{display:block;font-size:12px;line-height:1.6;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.of_the_month>.box+.box ul.stats>li:nth-child(2) a:nth-of-type(n+6){display:none !important;}
+
+/* ==========================================================================
    RESPONSIVE
    ========================================================================== */
 @media (max-width:1100px){
@@ -545,6 +570,7 @@ body#forums #content table td{vertical-align:middle;}
   .torrent_table,table.forum_index,#content table.layout{display:block;overflow-x:auto;white-space:nowrap;}
   thead th,tr.colhead td{position:static;}
   .head{padding:11px 14px 11px 16px;}
+  .of_the_month{flex-direction:column;}
 }
 @media (max-width:480px){
   #logo a{width:180px;height:40px;}
