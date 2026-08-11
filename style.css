@@ -117,7 +117,7 @@ hr{border:0;border-top:1px solid var(--line);margin:14px 0;}
 #header br{display:none;}
 
 /* logo */
-#logo{width:auto !important;height:auto !important;order:1;margin-right:auto;}
+#logo{width:auto !important;height:auto !important;order:1;margin-right:18px;}
 #logo a{
   display:block;width:300px;height:62px;text-indent:-9999px;overflow:hidden;
   background:url('assets/logo.png') no-repeat left center;background-size:contain;
@@ -156,17 +156,18 @@ hr{border:0;border-top:1px solid var(--line);margin:14px 0;}
 #nav_upload,#userinfo_minor li a[href*="upload"]{color:#fff;}
 #userinfo_minor li a[href*="donate"]{color:var(--gold);}
 
-/* donation drive: clear labelled chip on its own line under the logo */
+/* donation drive: compact labelled chip sitting to the RIGHT of the logo */
 #donation{
-  order:3;flex:0 0 100%;width:100%;margin:8px 0 -2px;padding:0;
-  display:block;text-align:left;
-  background:none;border:0;line-height:1.4;
-  font-size:11px;font-weight:600;color:var(--text-2);letter-spacing:.01em;
+  order:2;flex:0 0 auto;width:auto;margin:0;
+  display:inline-flex;align-items:center;gap:6px;
+  padding:6px 13px;border-radius:999px;
+  background:var(--bg-2);border:1px solid var(--line);
+  font-size:11px;font-weight:600;color:var(--text-1);white-space:nowrap;line-height:1;
 }
 #donation *{display:inline !important;float:none !important;background:none !important;border:0 !important;width:auto !important;height:auto !important;padding:0 !important;margin:0 !important;box-shadow:none !important;}
 #donation img{display:none !important;}
 #donation::before{
-  font-family:'MS';content:'\ea70';font-size:14px;color:var(--gold);vertical-align:-2px;margin-right:6px;
+  font-family:'MS';content:'\ea70';font-size:14px;color:var(--gold);
 }
 #donation a{color:var(--text-1) !important;}
 /* the native bar is built from <img> graphics; hide those, keep the clear text label */
@@ -260,6 +261,11 @@ hr{border:0;border-top:1px solid var(--line);margin:14px 0;}
 /* sidebar "Last 5 Uploads" poster etc. */
 .sidebar .box img{border-radius:10px;}
 .sidebar .pad{padding:14px;}
+/* sidebar panels: give the content real inner padding (text was flush to the edge) */
+.sidebar .box>div:not(.head){padding-left:16px;padding-right:16px;}
+.sidebar .box>div:not(.head):last-child{padding-bottom:14px;}
+.sidebar .box>.head+div{padding-top:12px;}
+.sidebar .box ul{margin:0;}
 
 /* ==========================================================================
    TORRENTS FILTER / SEARCH FORM
@@ -419,6 +425,9 @@ img.tooltip,.brackets_around{border-radius:8px;}
 /* colored user classes keep their color but ensure readable weight */
 [class*="permission_"],a[class*="permission_"]{font-weight:600;}
 
+/* forum listing: vertically centre the power-button status icons against multi-line rows */
+body#forums #content table td{vertical-align:middle;}
+
 /* ==========================================================================
    TOPBAR ICONS (Google Material Symbols, self-hosted subset)
    ========================================================================== */
@@ -485,12 +494,14 @@ img.tooltip,.brackets_around{border-radius:8px;}
    ========================================================================== */
 /* surface the TVDB cover art (was collapsed to 0x0) as a neat banner thumbnail */
 #torrent_table td img[width="170"],#torrent_table td img[width="220"]{
-  display:block !important;width:128px !important;height:44px !important;max-width:none !important;
+  display:block !important;width:212px !important;height:40px !important;max-width:none !important;
   object-fit:cover;object-position:center;border-radius:8px;
   border:1px solid var(--line-2);box-shadow:var(--shadow-sm);
 }
-#torrent_table tr.torrent>td:nth-child(2){width:140px !important;min-width:140px;padding:6px 6px 6px 10px;vertical-align:middle;}
+#torrent_table tr.torrent>td:nth-child(2){width:224px !important;min-width:224px;padding:6px 8px 6px 10px;vertical-align:middle;}
 #torrent_table tr.torrent>td:nth-child(2) a{display:inline-block;line-height:0;max-width:none;}
+/* keep size + numeric cells on a single line */
+.nobr,td.nobr,#torrent_table td.nobr{white-space:nowrap !important;}
 
 /* compact the info cell: pull format up onto the title line, put uploader + release on one line */
 #torrent_table tr.torrent>td{padding-top:7px;padding-bottom:7px;vertical-align:middle;}
