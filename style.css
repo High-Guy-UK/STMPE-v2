@@ -76,11 +76,11 @@ hr{border:0;border-top:1px solid var(--line);margin:14px 0;}
 #wrapper{width:100%;margin:0;padding:0;}
 .hidden{position:absolute !important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);}
 
-#content{width:100%;padding:0;}
-.thin,.wide{
-  width:100% !important;max-width:var(--maxw) !important;
-  margin:26px auto 60px !important;padding:0 26px !important;
+#content{
+  width:100%;max-width:var(--maxw);margin:0 auto;
+  padding:24px clamp(16px,3vw,40px) 40px;
 }
+.thin,.wide{width:100% !important;max-width:none !important;margin:0 !important;padding:0 !important;}
 
 /* Home split: sidebar + main column */
 .thin.home,.home{display:block;}
@@ -243,6 +243,28 @@ hr{border:0;border-top:1px solid var(--line);margin:14px 0;}
 .sidebar .pad{padding:14px;}
 
 /* ==========================================================================
+   TORRENTS FILTER / SEARCH FORM
+   ========================================================================== */
+.filter_torrents,.search_form,form.search_form{
+  background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);
+  box-shadow:var(--shadow-sm);padding:4px 20px 18px;margin:0 0 20px;
+}
+.filter_torrents h3,.search_form h3{
+  font-family:var(--fd);color:var(--text);font-size:14px;margin:0 0 14px;
+  padding:15px 0 13px;border-bottom:1px solid var(--line);display:flex;gap:8px;align-items:center;
+}
+.filter_torrents table,.search_form table{width:100%;background:none;border:0;}
+.filter_torrents td,.filter_torrents th,.search_form td,.search_form th{border:0;background:none !important;padding:6px 8px;vertical-align:middle;}
+.filter_torrents td.label,.filter_torrents .label{color:var(--text-2);font-style:normal;font-weight:500;}
+/* tag toggle buttons */
+.filter_torrents td a,.tags a,a.tag_selected,.filter_torrents .tag{
+  display:block;text-align:center;padding:8px 10px;border-radius:9px;
+  border:1px solid var(--line-2);background:var(--bg-1);color:var(--text-1);font-size:12px;transition:.15s;
+}
+.filter_torrents td a:hover,.tags a:hover{border-color:var(--accent-line);background:var(--accent-soft);color:#fff;}
+a.tag_selected,.tag_selected{background:var(--grad-accent-soft) !important;border-color:var(--accent-line) !important;color:#fff !important;}
+
+/* ==========================================================================
    TABLES
    ========================================================================== */
 table{border-collapse:collapse;width:100%;}
@@ -366,7 +388,6 @@ img.tooltip,.brackets_around{border-radius:8px;}
    ========================================================================== */
 @media (max-width:1100px){
   :root{--maxw:100%;}
-  .thin,.wide{padding:0 18px !important;}
 }
 @media (max-width:1000px){
   .thin.home{display:block !important;}
@@ -385,7 +406,7 @@ img.tooltip,.brackets_around{border-radius:8px;}
   /* dropdowns become inline-ish: keep absolute but constrain */
   #menu1 ul{position:absolute;min-width:180px;}
   #searchbars li{flex:1 1 46%;}
-  .thin,.wide{padding:0 12px !important;margin-top:16px !important;}
+  #content{padding:16px 14px 40px;}
   /* horizontal scroll for wide tables */
   .torrent_table,table.forum_index,#content table.layout{display:block;overflow-x:auto;white-space:nowrap;}
   thead th,tr.colhead td{position:static;}
