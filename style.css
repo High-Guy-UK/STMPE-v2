@@ -696,6 +696,56 @@ body#torrents #content .thin>.linkbox a:hover{color:#3fc8ff;text-decoration:unde
 body#torrents #content .thin>.main_column{grid-column:2;grid-row:3;align-self:start;min-width:0;width:auto !important;margin:0 !important;}
 
 /* ==========================================================================
+   NOTIFICATIONS — clean modern toasts stacked at the bottom-left.
+   Gazelle renders alerts as `#alerts > .alertbar` (new PM, Staff PM, forum
+   subscription replies, announcements, torrent notifications). The type is
+   detected from each alert's link target, giving it its own icon + accent.
+   ========================================================================== */
+#alerts{
+  position:fixed !important;left:20px;bottom:20px;top:auto;right:auto;z-index:100000;
+  display:flex;flex-direction:column;gap:10px;
+  width:344px;max-width:calc(100vw - 40px);margin:0;padding:0;
+}
+#alerts .alertbar{
+  position:relative;display:block;margin:0;overflow:hidden;
+  background:linear-gradient(180deg,#171b22,#12151b);
+  border:1px solid var(--line);border-radius:13px;
+  padding:13px 15px 13px 48px;
+  box-shadow:0 14px 34px rgba(0,0,0,.55),inset 0 1px 0 rgba(255,255,255,.03);
+  animation:alertIn .38s cubic-bezier(.2,.8,.25,1) both;
+  transition:transform .15s,border-color .15s;
+}
+#alerts .alertbar:hover{transform:translateY(-2px);border-color:var(--line-2);}
+#alerts .alertbar::after{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--accent);}
+#alerts .alertbar::before{
+  font-family:'MS';content:'\e7f5';   /* default: notifications bell */
+  position:absolute;left:15px;top:50%;transform:translateY(-50%);
+  font-size:21px;line-height:1;color:var(--accent);
+}
+#alerts .alertbar a{color:var(--text-1);text-decoration:none;font-size:13px;font-weight:500;line-height:1.4;display:block;}
+#alerts .alertbar a:hover{color:#fff;}
+/* per-type icon + accent, keyed to the alert's link target */
+#alerts .alertbar:has(a[href*="staffpm"])::before{content:'\e9e0';color:#ff7a6b;}       /* shield - staff PM */
+#alerts .alertbar:has(a[href*="staffpm"])::after{background:#ff7a6b;}
+#alerts .alertbar:has(a[href*="inbox"])::before{content:'\e159';color:var(--accent);}   /* mail - PM */
+#alerts .alertbar:has(a[href*="inbox"])::after{background:var(--accent);}
+#alerts .alertbar:has(a[href*="subscriptions"])::before{content:'\e8af';color:#9a86ff;} /* forum - subscription reply */
+#alerts .alertbar:has(a[href*="subscriptions"])::after{background:#9a86ff;}
+#alerts .alertbar:has(a[href*="announcement"])::before,
+#alerts .alertbar:has(a[href*="blog"])::before,
+#alerts .alertbar:has(a[href*="news"])::before{content:'\ef49';color:var(--gold);}       /* campaign - announcement */
+#alerts .alertbar:has(a[href*="announcement"])::after,
+#alerts .alertbar:has(a[href*="blog"])::after,
+#alerts .alertbar:has(a[href*="news"])::after{background:var(--gold);}
+/* staggered entrance */
+#alerts .alertbar:nth-child(1){animation-delay:.04s}
+#alerts .alertbar:nth-child(2){animation-delay:.11s}
+#alerts .alertbar:nth-child(3){animation-delay:.18s}
+#alerts .alertbar:nth-child(4){animation-delay:.25s}
+#alerts .alertbar:nth-child(n+5){animation-delay:.32s}
+@keyframes alertIn{from{opacity:0;transform:translateX(-18px) scale(.97);}to{opacity:1;transform:none;}}
+
+/* ==========================================================================
    RESPONSIVE
    ========================================================================== */
 @media (max-width:1100px){
@@ -727,6 +777,7 @@ body#torrents #content .thin>.main_column{grid-column:2;grid-row:3;align-self:st
 }
 @media (max-width:760px){
   body{font-size:13px;}
+  #alerts{left:12px;bottom:12px;width:auto;right:12px;}
   #header{padding:12px 14px 0;gap:10px;}
   #logo{order:1;margin-right:0;}
   #logo a{width:220px;height:46px;}
