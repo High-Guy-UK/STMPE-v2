@@ -514,6 +514,11 @@ body#forums #content table td{vertical-align:middle;}
 #torrent_table tr.torrent>td:nth-child(3)>div.nobr+div.nobr::before{content:"•";margin:0 8px;color:var(--text-3);}
 #torrent_table tr.torrent>td:nth-child(3) b{color:var(--text-3);font-weight:500;}
 
+/* Series/discography torrent rows: keep each release's format string on ONE
+   line. The wrap comes from a <br> before the audio/subs tags, so drop it. */
+table.torrent_table tr.group_torrent>td:not(.number):not(.group){white-space:nowrap;}
+table.torrent_table tr.group_torrent>td:not(.number):not(.group) br{display:none;}
+
 /* ==========================================================================
    HOMEPAGE "OF THE MONTH" — compact side-by-side landscape cards, moved to
    the bottom of the main column. (CSS can't re-parent into the sidebar, so
