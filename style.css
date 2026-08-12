@@ -578,28 +578,36 @@ table.torrent_table tr.group_torrent>td:not(.number):not(.group) br{display:none
    stays inside the grid, the grid always grows to contain it. */
 body#series #content .thin{
   display:grid;grid-template-columns:340px minmax(0,1fr);
-  grid-template-rows:200px 44px auto;
-  gap:16px 26px;align-items:start;
+  grid-template-rows:206px 26px auto;
+  gap:8px 26px;align-items:start;
 }
 body#series #content .thin>.sidebar{grid-column:1;grid-row:1 / -1;align-self:start;width:auto !important;margin:0 !important;}
-/* banner: full width of the torrent-table column, fixed height (cover) */
-body#series #content .thin>center{grid-column:2;grid-row:1;justify-self:stretch;width:100% !important;height:200px !important;margin:0 !important;padding:0 !important;line-height:0;overflow:hidden !important;border-radius:12px;position:relative;}
+/* banner: FULL image (contain) at a fixed height matched to the capped column
+   width (content maxes at --maxw, so the banner column tops out ~1114px -> ~206px). */
+body#series #content .thin>center{grid-column:2;grid-row:1;justify-self:stretch;width:100% !important;height:206px !important;margin:0 !important;padding:0 !important;line-height:0;overflow:hidden !important;border-radius:12px;position:relative;}
 body#series #content .thin>center>div,
-body#series #content .thin>center>div>h2{width:100% !important;max-width:none !important;height:200px !important;margin:0 !important;padding:0 !important;display:block !important;overflow:hidden !important;}
-body#series #content .thin>center #banner{width:100% !important;height:200px !important;max-width:100% !important;object-fit:cover;object-position:center 42%;border-radius:12px;display:block;}
-/* pills: a thin restyled strip centred directly under the banner */
+body#series #content .thin>center>div>h2{width:100% !important;max-width:none !important;height:206px !important;margin:0 !important;padding:0 !important;display:block !important;overflow:hidden !important;}
+body#series #content .thin>center #banner{width:100% !important;height:206px !important;max-width:100% !important;object-fit:contain;object-position:center;border-radius:12px;display:block;}
+/* "no trailer" notice -> fixed warning bubble, bottom-right, above everything */
+body#series #content .thin>center>p{
+  position:fixed !important;right:22px;bottom:22px;left:auto;top:auto;margin:0 !important;z-index:99999;
+  max-width:300px;padding:13px 16px 13px 44px;border-radius:12px;text-align:left;line-height:1.4;
+  font-size:13px;font-weight:500;color:#ffe9b8;
+  background:linear-gradient(180deg,#2a2010,#1c160b);border:1px solid #6b531f;
+  box-shadow:0 10px 30px rgba(0,0,0,.5);
+}
+body#series #content .thin>center>p::before{content:'\26A0';position:absolute;left:15px;top:50%;transform:translateY(-50%);font-size:18px;color:#ffb636;}
+/* action row: plain text links, tight and centred under the banner */
 body#series #content .thin>.linkbox{
   grid-column:2;grid-row:2;align-self:center;margin:0 !important;padding:0 !important;
-  display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:center;
+  display:flex;flex-wrap:wrap;gap:20px;align-items:center;justify-content:center;
 }
 body#series #content .thin>.linkbox a{
-  display:inline-flex;align-items:center;margin:0 !important;
-  padding:7px 15px;border-radius:999px;
-  background:var(--bg-2);border:1px solid var(--line);
-  color:var(--text-2);font-size:12.5px;font-weight:600;letter-spacing:.2px;
-  text-decoration:none;white-space:nowrap;transition:border-color .15s,color .15s,background .15s;
+  margin:0 !important;padding:0 !important;background:none;border:0;
+  color:var(--accent);font-size:12.5px;font-weight:500;
+  text-decoration:none;white-space:nowrap;transition:color .15s;
 }
-body#series #content .thin>.linkbox a:hover{border-color:var(--accent);color:#3fc8ff;background:rgba(31,157,255,.12);}
+body#series #content .thin>.linkbox a:hover{color:#3fc8ff;text-decoration:underline;}
 /* body: torrents fill the right column beneath the pills */
 body#series #content .thin>.main_column{grid-column:2;grid-row:3;align-self:start;min-width:0;width:auto !important;margin:0 !important;}
 
@@ -630,6 +638,18 @@ body#series .star-rating:has(.rb10:checked) label.star:nth-of-type(-n+11)::befor
 body#series .box:has(.star-rating) .center{text-align:center;}
 body#series .box:has(.star-rating) .star-rating{display:inline-block;float:none;}
 body#series .box:has(.star-rating) p{display:none !important;}
+
+/* Series Summary: modernise the jQuery-UI tab widget so it matches the cards.
+   The source icons become clean rounded buttons; the text panel goes full width. */
+body#series .main_column .ui-tabs{background:transparent !important;border:0 !important;padding:0 !important;width:auto !important;display:flex !important;gap:16px;align-items:flex-start;}
+body#series .main_column .ui-tabs-nav{background:transparent !important;border:0 !important;float:none !important;width:auto !important;margin:0 !important;padding:0 !important;display:flex !important;flex-direction:column;gap:7px;flex:0 0 auto;}
+body#series .main_column .ui-tabs-nav li{background:transparent !important;border:0 !important;margin:0 !important;padding:0 !important;list-style:none !important;float:none !important;}
+body#series .main_column .ui-tabs-nav li a{display:flex !important;align-items:center;justify-content:center;width:36px;height:36px;padding:0 !important;margin:0 !important;border-radius:10px;background:var(--bg-3) !important;border:1px solid var(--line) !important;transition:border-color .15s,background .15s,box-shadow .15s;}
+body#series .main_column .ui-tabs-nav li a img{width:18px !important;height:18px !important;margin:0 !important;}
+body#series .main_column .ui-tabs-nav li a:hover{border-color:var(--accent) !important;background:var(--bg-4) !important;}
+body#series .main_column .ui-tabs-nav li.ui-tabs-selected a,
+body#series .main_column .ui-tabs-nav li.ui-state-active a{background:rgba(31,157,255,.14) !important;border-color:var(--accent) !important;box-shadow:0 0 0 1px rgba(31,157,255,.5);}
+body#series .main_column .ui-tabs .ui-tabs-panel{background:transparent !important;border:0 !important;margin:0 !important;padding:2px 4px 0 0 !important;color:var(--text-1);line-height:1.65;flex:1 1 auto;min-width:0;}
 
 /* ==========================================================================
    RESPONSIVE
