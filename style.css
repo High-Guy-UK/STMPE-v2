@@ -140,6 +140,26 @@ hr{border:0;border-top:1px solid var(--line);margin:14px 0;}
 #userinfo_stats li a,#userinfo_major li a{color:var(--text-1);}
 #userinfo_stats .stat,#userinfo_major .stat{color:var(--text);font-weight:600;font-variant-numeric:tabular-nums;}
 
+/* username group also gets pills (so the whole cluster matches) */
+#userinfo_username>li{
+  background:var(--bg-2);border:1px solid var(--line);border-radius:999px;
+  padding:5px 11px;line-height:1.1;
+}
+#userinfo_username>li:nth-child(1){padding:4px 13px 4px 11px;}
+/* a hint of colour on every pill, keyed to its icon */
+#userinfo_username>li:nth-child(1){background:rgba(31,157,255,.10);border-color:rgba(31,157,255,.32);}   /* username - blue */
+#userinfo_username>li:nth-child(2){background:rgba(63,200,255,.08);border-color:rgba(63,200,255,.28);}   /* edit - cyan */
+#userinfo_username>li:nth-child(3){background:rgba(235,100,90,.10);border-color:rgba(235,100,90,.32);}   /* logout - red */
+#userinfo_major>li:nth-child(1){background:rgba(52,199,120,.10);border-color:rgba(52,199,120,.30);}      /* upload - green */
+#userinfo_major>li:nth-child(2){background:rgba(160,130,250,.10);border-color:rgba(160,130,250,.30);}    /* invite - purple */
+#userinfo_major>li:nth-child(3){background:rgba(244,192,78,.10);border-color:rgba(244,192,78,.30);}      /* donate - gold */
+#userinfo_stats>li:nth-child(1){background:rgba(52,199,120,.09);border-color:rgba(52,199,120,.26);}      /* up - green */
+#userinfo_stats>li:nth-child(2){background:rgba(246,201,69,.09);border-color:rgba(246,201,69,.26);}      /* H&Rs - amber */
+#userinfo_stats>li:nth-child(3){background:rgba(31,157,255,.09);border-color:rgba(31,157,255,.26);}      /* bonus - blue */
+#userinfo_stats>li:nth-child(4){background:rgba(244,192,78,.09);border-color:rgba(244,192,78,.26);}      /* lumens - gold */
+/* the username person mark lights up pale-green on hover — "powered on" */
+#userinfo_username>li:nth-child(1) a:hover::before{color:#86efac !important;text-shadow:0 0 9px rgba(134,239,172,.65);}
+
 /* action links (Upload / Edit / Logout / Donate ...) */
 #userinfo_minor{gap:6px;}
 #userinfo_minor li{
