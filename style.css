@@ -663,15 +663,19 @@ body#series .box:has(.star-rating) p{display:none !important;}
 
 /* Series Summary: modernise the jQuery-UI tab widget so it matches the cards.
    The source icons become clean rounded buttons; the text panel goes full width. */
-body#series .main_column .ui-tabs{background:transparent !important;border:0 !important;padding:0 !important;width:auto !important;display:flex !important;gap:16px;align-items:flex-start;}
-body#series .main_column .ui-tabs-nav{background:transparent !important;border:0 !important;float:none !important;width:auto !important;margin:0 !important;padding:0 !important;display:flex !important;flex-direction:column;gap:7px;flex:0 0 auto;}
-body#series .main_column .ui-tabs-nav li{background:transparent !important;border:0 !important;margin:0 !important;padding:0 !important;list-style:none !important;float:none !important;}
+/* Text panel full-width; the source icons sit on the bottom line next to the
+   vote arrows (absolute) so the card stays short. */
+body#series .main_column .ui-tabs{position:relative !important;background:transparent !important;border:0 !important;padding:0 !important;width:auto !important;display:block !important;}
+body#series .main_column .ui-tabs-nav{position:absolute !important;bottom:4px;left:300px;right:auto;top:auto;background:transparent !important;border:0 !important;float:none !important;width:auto !important;margin:0 !important;padding:0 !important;display:flex !important;flex-direction:row;flex-wrap:wrap;gap:8px;}
+body#series .main_column .ui-tabs-nav li{display:inline-flex !important;width:auto !important;flex:0 0 auto !important;background:transparent !important;border:0 !important;margin:0 !important;padding:0 !important;list-style:none !important;float:none !important;}
 body#series .main_column .ui-tabs-nav li a{display:flex !important;align-items:center;justify-content:center;width:36px;height:36px;padding:0 !important;margin:0 !important;border-radius:10px;background:var(--bg-3) !important;border:1px solid var(--line) !important;transition:border-color .15s,background .15s,box-shadow .15s;}
 body#series .main_column .ui-tabs-nav li a img{width:18px !important;height:18px !important;margin:0 !important;}
 body#series .main_column .ui-tabs-nav li a:hover{border-color:var(--accent) !important;background:var(--bg-4) !important;}
 body#series .main_column .ui-tabs-nav li.ui-tabs-selected a,
 body#series .main_column .ui-tabs-nav li.ui-state-active a{background:rgba(31,157,255,.14) !important;border-color:var(--accent) !important;box-shadow:0 0 0 1px rgba(31,157,255,.5);}
-body#series .main_column .ui-tabs .ui-tabs-panel{background:transparent !important;border:0 !important;margin:0 !important;padding:2px 4px 0 0 !important;color:var(--text-1);line-height:1.65;flex:1 1 auto;min-width:0;}
+body#series .main_column .ui-tabs .ui-tabs-panel{order:1;background:transparent !important;border:0 !important;margin:0 !important;padding:2px 6px 4px 18px !important;color:var(--text-1);line-height:1.65;min-width:0;}
+/* a small gap above main-column boxes so the Series Summary isn't touching the requests */
+body#series #content .thin>.main_column>.box{margin-top:14px;}
 
 /* ==========================================================================
    TORRENTS (season / episode) PAGES — mirror the series-page layout:
