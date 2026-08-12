@@ -446,6 +446,25 @@ img.tooltip,.brackets_around{border-radius:8px;}
 /* forum listing: vertically centre the power-button status icons against multi-line rows */
 body#forums #content table td{vertical-align:middle;}
 
+/* forum topic list: shrink the side columns to their content so the Topic column
+   absorbs the remaining width and each thread (title + pagination + jump arrow)
+   stays on a single line instead of wrapping */
+body#forums #content .thin>table:not([id]) td:nth-child(1),
+body#forums #content .thin>table:not([id]) td:nth-child(3),
+body#forums #content .thin>table:not([id]) td:nth-child(4),
+body#forums #content .thin>table:not([id]) td:nth-child(5),
+body#forums #content .thin>table:not([id]) td:nth-child(6){width:1%;}
+body#forums #content .thin>table:not([id]) td:nth-child(3),
+body#forums #content .thin>table:not([id]) td:nth-child(4){white-space:nowrap;}
+
+/* forum posts: pin the avatar column to a fixed width so a wide avatar or long
+   user-info line can't inflate the cell and shove the post body to the right
+   (this is what made every-other post look centred); keep avatar + body top-aligned */
+body#forums td.avatar{width:174px !important;vertical-align:top !important;}
+body#forums td.avatar .user_details{width:150px;}
+body#forums td.avatar img{max-width:150px;height:auto;}
+body#forums td.body{vertical-align:top !important;}
+
 /* ==========================================================================
    TOPBAR ICONS (Google Material Symbols, self-hosted subset)
    ========================================================================== */
