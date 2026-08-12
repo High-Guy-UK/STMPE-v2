@@ -1,8 +1,8 @@
 @charset "utf-8";
 /* ==========================================================================
-   BroadcasTheNet — "STMPE v2 / Nova" theme
-   A ground-up modern dark redesign. CSS-only, self-contained.
-   Author: senior web design pass. Palette: near-black + royal-cyan accents.
+   STMPE v2 / Nova — a modern dark theme
+   A ground-up dark redesign. CSS-only, self-contained.
+   Palette: near-black + royal-cyan accents.
    ========================================================================== */
 
 /* ---------- Self-hosted type ---------- */
@@ -570,22 +570,38 @@ table.torrent_table tr.group_torrent>td:not(.number):not(.group) br{display:none
 /* ==========================================================================
    SERIES PAGE — top row (pills left / banner right) + 2-column body
    ========================================================================== */
-body#series #content .thin{display:grid;grid-template-columns:340px minmax(0,1fr);gap:22px 26px;align-items:start;}
-/* top row */
+/* Layout: poster sidebar on the left (top edge level with the banner); the
+   right column stacks banner -> pills -> torrent table. The banner and pills
+   rows are a DEFINITE size, so the sidebar (which spans all rows) can only
+   ever spill its extra height into the table row — it can never push the
+   banner or pills apart when a season is shown/hidden. Because the sidebar
+   stays inside the grid, the grid always grows to contain it. */
+body#series #content .thin{
+  display:grid;grid-template-columns:340px minmax(0,1fr);
+  grid-template-rows:200px 44px auto;
+  gap:16px 26px;align-items:start;
+}
+body#series #content .thin>.sidebar{grid-column:1;grid-row:1 / -1;align-self:start;width:auto !important;margin:0 !important;}
+/* banner: full width of the torrent-table column, fixed height (cover) */
+body#series #content .thin>center{grid-column:2;grid-row:1;justify-self:stretch;width:100% !important;height:200px !important;margin:0 !important;padding:0 !important;line-height:0;overflow:hidden !important;border-radius:12px;position:relative;}
+body#series #content .thin>center>div,
+body#series #content .thin>center>div>h2{width:100% !important;max-width:none !important;height:200px !important;margin:0 !important;padding:0 !important;display:block !important;overflow:hidden !important;}
+body#series #content .thin>center #banner{width:100% !important;height:200px !important;max-width:100% !important;object-fit:cover;object-position:center 42%;border-radius:12px;display:block;}
+/* pills: a thin restyled strip centred directly under the banner */
 body#series #content .thin>.linkbox{
-  grid-column:1 / -1;grid-row:1;align-self:center;margin:0;
-  display:flex;flex-wrap:wrap;gap:10px;justify-content:center;align-items:center;
-  padding-right:640px; /* reserve the banner's space so pills centre in the area beside it */
+  grid-column:2;grid-row:2;align-self:center;margin:0 !important;padding:0 !important;
+  display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:center;
 }
-body#series #content .thin>.linkbox a{white-space:nowrap;margin:0;text-align:center;}
-body#series #content .thin>center{grid-column:1 / -1;grid-row:1;justify-self:end;align-self:center;margin:0;line-height:0;}
-body#series #content .thin>center>div{margin:0 auto;}
-body#series #content .thin>center>div img{
-  height:112px !important;width:auto !important;max-width:100% !important;border-radius:10px;display:block;
+body#series #content .thin>.linkbox a{
+  display:inline-flex;align-items:center;margin:0 !important;
+  padding:7px 15px;border-radius:999px;
+  background:var(--bg-2);border:1px solid var(--line);
+  color:var(--text-2);font-size:12.5px;font-weight:600;letter-spacing:.2px;
+  text-decoration:none;white-space:nowrap;transition:border-color .15s,color .15s,background .15s;
 }
-/* body: info sidebar left, torrents right */
-body#series #content .thin>.sidebar{grid-column:1;grid-row:2;width:auto !important;margin:0 !important;}
-body#series #content .thin>.main_column{grid-column:2;grid-row:2;min-width:0;width:auto !important;margin:0 !important;}
+body#series #content .thin>.linkbox a:hover{border-color:var(--accent);color:#3fc8ff;background:rgba(31,157,255,.12);}
+/* body: torrents fill the right column beneath the pills */
+body#series #content .thin>.main_column{grid-column:2;grid-row:3;align-self:start;min-width:0;width:auto !important;margin:0 !important;}
 
 /* Series Rating -> blue stars (hide the power-button sprite + raw radios) */
 body#series .rating,body#series .rating-bg{display:none !important;}
@@ -624,15 +640,18 @@ body#series .box:has(.star-rating) p{display:none !important;}
 @media (max-width:1000px){
   .thin.home{display:block !important;}
   .thin.home .sidebar{margin-bottom:22px !important;}
-  /* series page: collapse to a single column */
-  body#series #content .thin{grid-template-columns:1fr !important;}
+  /* series page: collapse to a single stacked column (banner, pills, info, torrents) */
+  body#series #content .thin{grid-template-columns:1fr !important;grid-template-rows:none !important;}
   body#series #content .thin>.linkbox,
   body#series #content .thin>center,
   body#series #content .thin>.sidebar,
   body#series #content .thin>.main_column{grid-column:1 !important;grid-row:auto !important;justify-self:stretch !important;}
-  body#series #content .thin>center{justify-self:center !important;margin:8px 0 !important;}
-  body#series #content .thin>.linkbox{padding-right:0 !important;}
-  body#series #content .thin>.sidebar{margin-bottom:22px !important;}
+  body#series #content .thin>center,
+  body#series #content .thin>center>div,
+  body#series #content .thin>center>div>h2{height:132px !important;margin:0 !important;}
+  body#series #content .thin>center #banner{height:132px !important;}
+  body#series #content .thin>.linkbox{padding-right:0 !important;margin:8px 0 0 !important;}
+  body#series #content .thin>.sidebar{margin:18px 0 0 !important;}
 }
 @media (max-width:760px){
   body{font-size:13px;}
