@@ -835,7 +835,10 @@ body#torrents #content .thin>.main_column{grid-column:2;grid-row:3;align-self:st
 #slider .panel td.label{width:190px;vertical-align:top;padding-top:9px;}
 #slider .panel input[type=text],#slider .panel input[type=password],#slider .panel input[type=email],#slider .panel input[type=url],#slider .panel select,#slider .panel textarea{max-width:100% !important;box-sizing:border-box;}
 
-/* IRC card: flow the long channel list into 3 short columns (checkbox left, name after) */
+/* IRC card: flow the long channel list into 3 short columns (checkbox left, name
+   after). The table must be display:block so the multi-column tbody stays inside
+   the card instead of overflowing off the right edge. */
+#slider .panel:nth-child(4) table.border{display:block !important;width:100% !important;max-width:100% !important;box-sizing:border-box;}
 #slider .panel:nth-child(4) table tbody{display:block !important;column-count:3;column-gap:22px;}
 #slider .panel:nth-child(4) table tr{display:flex !important;align-items:center;gap:8px;break-inside:avoid;padding:3px 0;}
 #slider .panel:nth-child(4) table tr:first-child{column-span:all;display:block !important;padding:0 0 10px;color:var(--text-2);}
@@ -843,15 +846,27 @@ body#torrents #content .thin>.main_column{grid-column:2;grid-row:3;align-self:st
 #slider .panel:nth-child(4) table td.label{order:2 !important;flex:1 1 auto !important;text-align:left;padding-top:0 !important;font-size:12px;}
 #slider .panel:nth-child(4) table td:not(.label){order:1 !important;flex:0 0 auto !important;}
 
-/* API card: put each IP and its Block/Delete buttons on one compact line */
-#slider .panel:nth-child(5) table.border{display:block !important;width:100% !important;max-width:100% !important;}
-#slider .panel:nth-child(5) table.border tbody{display:block !important;width:100% !important;}
-#slider .panel:nth-child(5) table.border tr{display:flex !important;align-items:center;gap:10px;padding:3px 0;}
-#slider .panel:nth-child(5) table.border td{padding:0 !important;display:flex;align-items:center;}
-#slider .panel:nth-child(5) table.border td:first-child{flex:1 1 auto;min-width:0;padding-right:10px !important;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-#slider .panel:nth-child(5) table.border td:last-child{flex:0 0 132px;justify-content:flex-end;}
-#slider .panel:nth-child(5) table.border form{display:inline-flex !important;gap:6px;margin:0 !important;}
-#slider .panel:nth-child(5) table.border input[type=submit]{padding:4px 12px !important;font-size:11px !important;border-radius:8px !important;margin:0 !important;}
+/* API card. There are TWO tables: the first is the API-key/security settings,
+   the second is the IP allow/block list. Only the IP list gets the one-line
+   treatment (each IP + its Block/Delete on a single row). */
+#slider .panel:nth-child(5) table.border:last-of-type{display:block !important;width:100% !important;max-width:100% !important;}
+#slider .panel:nth-child(5) table.border:last-of-type tbody{display:block !important;width:100% !important;}
+#slider .panel:nth-child(5) table.border:last-of-type tr{display:flex !important;align-items:center;gap:10px;padding:3px 0;}
+#slider .panel:nth-child(5) table.border:last-of-type td{padding:0 !important;display:flex;align-items:center;}
+#slider .panel:nth-child(5) table.border:last-of-type td:first-child{flex:1 1 auto;min-width:0;padding-right:10px !important;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+#slider .panel:nth-child(5) table.border:last-of-type td:last-child{flex:0 0 132px;justify-content:flex-end;}
+#slider .panel:nth-child(5) table.border:last-of-type form{display:inline-flex !important;gap:6px;margin:0 !important;}
+#slider .panel:nth-child(5) table.border:last-of-type input[type=submit]{padding:4px 12px !important;font-size:11px !important;border-radius:8px !important;margin:0 !important;}
+/* API settings table (first): keep a clean, contained label|value layout, and lift
+   the "API documentation" link up onto the "API Security" heading line (top-right) */
+#slider .panel:nth-child(5) table.border:first-of-type{display:table !important;width:100% !important;max-width:100% !important;table-layout:auto !important;position:relative;box-sizing:border-box;}
+#slider .panel:nth-child(5) table.border:first-of-type tbody{display:table-row-group !important;}
+#slider .panel:nth-child(5) table.border:first-of-type tr{display:table-row !important;padding:0 !important;}
+#slider .panel:nth-child(5) table.border:first-of-type td{display:table-cell !important;padding:7px 10px 7px 0 !important;overflow:visible !important;text-overflow:clip !important;white-space:normal !important;vertical-align:top;}
+#slider .panel:nth-child(5) table.border:first-of-type td.label{width:150px !important;white-space:nowrap;}
+#slider .panel:nth-child(5) table.border:first-of-type input[type=text]{max-width:300px !important;}
+#slider .panel:nth-child(5) table.border:first-of-type p{margin:4px 0 0 !important;}
+#slider .panel:nth-child(5) table.border:first-of-type p:has(a){position:absolute !important;top:2px;right:2px;margin:0 !important;text-align:right;font-size:12px;line-height:1.45;max-width:330px;}
 
 @media (max-width:1000px){#slider .scrollContainer{column-count:1 !important;}#slider .panel:nth-child(4) table tbody{column-count:2;}}
 
