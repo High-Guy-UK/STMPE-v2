@@ -681,21 +681,32 @@ body#series .box:has(.star-rating) .center{text-align:center;}
 body#series .box:has(.star-rating) .star-rating{display:inline-block;float:none;}
 body#series .box:has(.star-rating) p{display:none !important;}
 
-/* Series Summary: modernise the jQuery-UI tab widget so it matches the cards.
-   The source icons become clean rounded buttons; the text panel goes full width. */
-/* Text panel full-width; the source icons sit on the bottom line next to the
-   vote arrows (absolute) so the card stays short. */
-body#series .main_column .ui-tabs{position:relative !important;background:transparent !important;border:0 !important;padding:0 !important;width:auto !important;display:block !important;}
-body#series .main_column .ui-tabs-nav{position:absolute !important;bottom:4px;left:300px;right:auto;top:auto;background:transparent !important;border:0 !important;float:none !important;width:auto !important;margin:0 !important;padding:0 !important;display:flex !important;flex-direction:row;flex-wrap:wrap;gap:8px;}
-body#series .main_column .ui-tabs-nav li{display:inline-flex !important;width:auto !important;flex:0 0 auto !important;background:transparent !important;border:0 !important;margin:0 !important;padding:0 !important;list-style:none !important;float:none !important;}
-body#series .main_column .ui-tabs-nav li a{display:flex !important;align-items:center;justify-content:center;width:36px;height:36px;padding:0 !important;margin:0 !important;border-radius:10px;background:var(--bg-3) !important;border:1px solid var(--line) !important;transition:border-color .15s,background .15s,box-shadow .15s;}
-body#series .main_column .ui-tabs-nav li a img{width:18px !important;height:18px !important;margin:0 !important;}
-body#series .main_column .ui-tabs-nav li a:hover{border-color:var(--accent) !important;background:var(--bg-4) !important;}
-body#series .main_column .ui-tabs-nav li.ui-tabs-selected a,
-body#series .main_column .ui-tabs-nav li.ui-state-active a{background:rgba(31,157,255,.14) !important;border-color:var(--accent) !important;box-shadow:0 0 0 1px rgba(31,157,255,.5);}
-body#series .main_column .ui-tabs .ui-tabs-panel{order:1;background:transparent !important;border:0 !important;margin:0 !important;padding:2px 6px 4px 18px !important;color:var(--text-1);line-height:1.65;min-width:0;}
-/* a small gap above main-column boxes so the Series Summary isn't touching the requests */
-body#series #content .thin>.main_column>.box{margin-top:14px;}
+/* Series Summary: clean, TMDb-style layout for the jQuery-UI tab widget (#summary > #tabs).
+   NB: series.php renders with body#series on some pages and body#torrents on others, so
+   these rules are scoped to #summary (body-agnostic); the #content prefix just buys enough
+   specificity to win. Source tabs sit in a toolbar across the top with a divider; the
+   description spans the full card width; a subtle footer holds the Edit link (left) and the
+   up/down vote arrows (right); the whole widget is inset from the card edges. */
+#content #summary .ui-tabs{display:flex !important;flex-direction:column !important;width:auto !important;position:static !important;background:transparent !important;border:0 !important;padding:6px 20px 16px 20px !important;min-height:0 !important;}
+/* source-tab toolbar across the top */
+#content #summary .ui-tabs>.ui-tabs-nav{order:0 !important;position:static !important;float:none !important;display:flex !important;flex-direction:row !important;justify-content:flex-start !important;flex-wrap:wrap;gap:6px;width:auto !important;height:auto !important;margin:0 0 13px !important;padding:0 0 14px !important;border:0 !important;border-bottom:1px solid var(--line) !important;background:transparent !important;}
+#content #summary .ui-tabs>.ui-tabs-nav li{float:none !important;display:inline-flex !important;width:auto !important;height:auto !important;margin:0 !important;padding:0 !important;border:0 !important;background:transparent !important;list-style:none !important;}
+#content #summary .ui-tabs>.ui-tabs-nav li a{display:inline-flex !important;align-items:center;justify-content:center;width:34px;height:30px;padding:0 !important;margin:0 !important;border-radius:8px;background:var(--bg-3) !important;border:1px solid var(--line) !important;box-sizing:border-box;transition:border-color .15s,background .15s;}
+#content #summary .ui-tabs>.ui-tabs-nav li a img{width:16px !important;height:16px !important;max-width:16px !important;max-height:16px !important;margin:0 !important;}
+#content #summary .ui-tabs>.ui-tabs-nav li a:hover{border-color:var(--accent) !important;background:var(--bg-4) !important;}
+#content #summary .ui-tabs>.ui-tabs-nav li.ui-tabs-selected a,
+#content #summary .ui-tabs>.ui-tabs-nav li.ui-state-active a{background:rgba(31,157,255,.14) !important;border-color:var(--accent) !important;box-shadow:0 0 0 1px rgba(31,157,255,.4);}
+/* description text: full width, readable */
+#content #summary .ui-tabs>.ui-tabs-panel{order:1 !important;float:none !important;width:auto !important;position:relative !important;overflow:hidden;background:transparent !important;border:0 !important;margin:0 !important;padding:0 !important;color:var(--text-3);line-height:1.7;font-size:13px;}
+#content #summary .ui-tabs>.ui-tabs-panel>[id$="_text"]{color:var(--text-1) !important;display:block;width:auto !important;margin:0 0 13px !important;}
+#content #summary .ui-tabs>.ui-tabs-panel>br{display:none !important;}
+/* subtle footer: Edit link (left) + up/down vote arrows (right) */
+#content #summary .ui-tabs>.ui-tabs-panel [onclick^="editSummary"]{position:static !important;font-size:11.5px;color:var(--text-3);text-decoration:none;}
+#content #summary .ui-tabs>.ui-tabs-panel [onclick^="editSummary"]:hover{color:var(--accent-bright);}
+#content #summary [id^="summary_votes_"]{position:static !important;float:right !important;display:inline-flex !important;align-items:center;gap:6px;font-size:12px;color:var(--text-2);margin-top:-2px;}
+#content #summary [id^="summary_votes_"] img{vertical-align:middle;width:12px;height:12px;}
+/* small gap above the summary box so it isn't touching the box above it */
+#content .thin .box:has(#summary){margin-top:14px;}
 
 /* ==========================================================================
    TORRENTS (season / episode) PAGES — mirror the series-page layout:
