@@ -714,7 +714,9 @@ body#series .box:has(.star-rating) p{display:none !important;}
    Here the banner + season title live inside the H2 (not a `center`/#banner). */
 body#torrents #content .thin{
   display:grid;grid-template-columns:340px minmax(0,1fr);
-  grid-template-rows:auto 24px auto;
+  /* row 1 is fixed to the banner height (not auto) so a tall sidebar can't inflate it
+     and shove the seasons down — that was the big gap when all seasons were collapsed */
+  grid-template-rows:206px 24px auto;
   gap:8px 26px;align-items:start;
 }
 body#torrents #content .thin>.sidebar{grid-column:1;grid-row:1 / -1;align-self:start;width:auto !important;margin:0 !important;float:none !important;}
