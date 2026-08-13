@@ -657,20 +657,22 @@ body#series #content .thin>.main_column{grid-column:2;grid-row:3;align-self:star
    "Play Trailer" pill at the bottom-centre of the banner. #playbutton stays the click
    target (its trailer handler is untouched) — it's made invisible and shrunk to the pill
    area, and the visible pill is drawn as a pseudo-element that passes clicks through. */
-#content .thin #playbutton{position:absolute !important;left:50% !important;top:auto !important;bottom:14px !important;transform:translateX(-50%) !important;width:150px !important;height:34px !important;opacity:0 !important;cursor:pointer !important;z-index:5 !important;margin:0 !important;}
+#content .thin #playbutton{position:absolute !important;left:auto !important;right:16px !important;top:auto !important;bottom:14px !important;transform:none !important;width:150px !important;height:34px !important;opacity:0 !important;cursor:pointer !important;z-index:5 !important;margin:0 !important;}
 #content .thin center:has(> #playbutton),#content .thin h2:has(> #playbutton){position:relative;}
 #content .thin center:has(> #playbutton)::after,#content .thin h2:has(> #playbutton)::after{
   content:"\25B6   Play Trailer";
-  position:absolute;left:50%;bottom:14px;transform:translateX(-50%);
+  position:absolute;left:auto;right:16px;bottom:14px;
   display:flex;align-items:center;justify-content:center;
   height:34px;padding:0 18px;box-sizing:border-box;
   font-family:var(--fd);font-size:12px;font-weight:600;letter-spacing:.03em;
   color:#fff;background:rgba(10,12,16,.6);border:1px solid rgba(255,255,255,.3);
   border-radius:999px;backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px);
   pointer-events:none;z-index:4;white-space:nowrap;box-shadow:0 4px 14px rgba(0,0,0,.4);
+  transition:color .15s,border-color .15s;
 }
+/* hover: contrast the text/border instead of filling the pill */
 #content .thin center:has(> #playbutton:hover)::after,#content .thin h2:has(> #playbutton:hover)::after{
-  background:rgba(31,157,255,.9);border-color:var(--accent-bright);
+  color:var(--accent-bright);border-color:var(--accent-bright);
 }
 
 /* Series Rating -> blue stars (hide the power-button sprite + raw radios) */
