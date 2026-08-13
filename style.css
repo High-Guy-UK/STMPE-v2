@@ -805,6 +805,36 @@ body#torrents #content .thin>.main_column{grid-column:2;grid-row:3;align-self:st
 @keyframes alertIn{from{opacity:0;transform:translateX(-18px) scale(.97);}to{opacity:1;transform:none;}}
 
 /* ==========================================================================
+   SETTINGS / EDIT PROFILE  (user.php?action=edit)
+   The stock page crams every section into a narrow ~580px jQuery slider column.
+   Here the carousel is unwound into a full-width, masonry card layout — each
+   section (Layout, Preferences, User Info, IRC, API, Password) becomes its own
+   card matching the rest of the site, flowed across two columns.
+   ========================================================================== */
+/* settings page doesn't have a sidebar/banner, so drop the series-page grid */
+#content .thin:has(#slider){display:block !important;grid-template-columns:none !important;grid-template-rows:none !important;}
+#content #slider{width:auto !important;max-width:none !important;float:none !important;margin:0 !important;display:block !important;}
+#slider>h2{margin:0 0 16px !important;font-size:18px;}
+/* the carousel nav is redundant once every section is visible */
+#slider ul.navigation{display:none !important;}
+/* unclip the slider window and turn the sliding track into a 2-column masonry */
+#slider .scroll{overflow:visible !important;width:auto !important;height:auto !important;position:static !important;}
+#slider .scrollContainer{width:auto !important;height:auto !important;left:0 !important;top:auto !important;position:static !important;display:block !important;column-count:2 !important;column-gap:18px !important;transform:none !important;}
+#slider .scrollContainer>.panel{float:none !important;width:100% !important;min-width:0 !important;display:inline-block !important;position:static !important;left:auto !important;margin:0 0 18px !important;padding:0 20px 18px !important;background:var(--bg-2) !important;border:1px solid var(--line) !important;border-radius:12px !important;box-sizing:border-box !important;break-inside:avoid !important;-webkit-column-break-inside:avoid !important;vertical-align:top;}
+/* card title header per section */
+#slider .scrollContainer>.panel::before{display:block;font-family:var(--fd);font-weight:600;font-size:14px;color:var(--text-1);letter-spacing:.01em;padding:14px 0 12px;margin-bottom:12px;border-bottom:1px solid var(--line);}
+#slider .scrollContainer>.panel:nth-child(1)::before{content:"Layout";}
+#slider .scrollContainer>.panel:nth-child(2)::before{content:"Preferences";}
+#slider .scrollContainer>.panel:nth-child(3)::before{content:"User Info";}
+#slider .scrollContainer>.panel:nth-child(4)::before{content:"IRC";}
+#slider .scrollContainer>.panel:nth-child(5)::before{content:"API";}
+#slider .scrollContainer>.panel:nth-child(6)::before{content:"Password";}
+#slider .panel table{width:100% !important;}
+#slider .panel td.label{width:190px;vertical-align:top;padding-top:9px;}
+#slider .panel input[type=text],#slider .panel input[type=password],#slider .panel input[type=email],#slider .panel select,#slider .panel textarea{max-width:100% !important;box-sizing:border-box;}
+@media (max-width:1000px){#slider .scrollContainer{column-count:1 !important;}}
+
+/* ==========================================================================
    RESPONSIVE
    ========================================================================== */
 @media (max-width:1100px){
