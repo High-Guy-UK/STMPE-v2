@@ -363,6 +363,7 @@ td.number_column,.nobr,.mobile-hide td, td[class*="numb"]{font-variant-numeric:t
    ========================================================================== */
 input,select,textarea,button{font-family:var(--ff);font-size:13px;color:var(--text);}
 input[type=text],input[type=search],input[type=password],input[type=email],input[type=number],
+input[type=url],input[type=tel],
 input:not([type]),select,textarea,.inputtext{
   background:var(--bg-1);border:1px solid var(--line-2);border-radius:10px;
   padding:9px 12px;color:var(--text);transition:.15s;-webkit-appearance:none;appearance:none;
@@ -374,14 +375,15 @@ input:focus,select:focus,textarea:focus{
 select{background-image:linear-gradient(45deg,transparent 50%,var(--text-2) 50%),linear-gradient(135deg,var(--text-2) 50%,transparent 50%);
   background-position:calc(100% - 16px) 52%,calc(100% - 11px) 52%;background-size:5px 5px,5px 5px;background-repeat:no-repeat;padding-right:30px;}
 
+/* buttons: outline / ghost style — no fill; hover is shown by contrasting the text */
 input[type=submit],button,.button,input[type=button],input.submit,button.submit,a.button{
   cursor:pointer;font-family:var(--fd);font-weight:600;font-size:12.5px;letter-spacing:.01em;
-  padding:9px 18px;border-radius:11px;border:1px solid transparent;
-  background:var(--grad-accent);color:#04121f;box-shadow:0 6px 18px rgba(31,120,235,.3);
+  padding:9px 18px;border-radius:11px;border:1px solid var(--line-2);
+  background:transparent;background-image:none;color:var(--accent-bright);box-shadow:none;
   transition:.15s;
 }
-input[type=submit]:hover,button:hover,.button:hover,a.button:hover{
-  filter:brightness(1.08);transform:translateY(-1px);box-shadow:0 10px 24px rgba(31,120,235,.4);
+input[type=submit]:hover,button:hover,.button:hover,input[type=button]:hover,a.button:hover{
+  color:#fff;border-color:var(--accent);background:transparent;box-shadow:none;transform:none;
 }
 /* submit/action row container (NOT a button) */
 div.submit,.submit_row,.linkbox_submit{
@@ -831,8 +833,27 @@ body#torrents #content .thin>.main_column{grid-column:2;grid-row:3;align-self:st
 #slider .scrollContainer>.panel:nth-child(6)::before{content:"Password";}
 #slider .panel table{width:100% !important;}
 #slider .panel td.label{width:190px;vertical-align:top;padding-top:9px;}
-#slider .panel input[type=text],#slider .panel input[type=password],#slider .panel input[type=email],#slider .panel select,#slider .panel textarea{max-width:100% !important;box-sizing:border-box;}
-@media (max-width:1000px){#slider .scrollContainer{column-count:1 !important;}}
+#slider .panel input[type=text],#slider .panel input[type=password],#slider .panel input[type=email],#slider .panel input[type=url],#slider .panel select,#slider .panel textarea{max-width:100% !important;box-sizing:border-box;}
+
+/* IRC card: flow the long channel list into 3 short columns (checkbox left, name after) */
+#slider .panel:nth-child(4) table tbody{display:block !important;column-count:3;column-gap:22px;}
+#slider .panel:nth-child(4) table tr{display:flex !important;align-items:center;gap:8px;break-inside:avoid;padding:3px 0;}
+#slider .panel:nth-child(4) table tr:first-child{column-span:all;display:block !important;padding:0 0 10px;color:var(--text-2);}
+#slider .panel:nth-child(4) table td{padding:0 !important;width:auto !important;vertical-align:middle;}
+#slider .panel:nth-child(4) table td.label{order:2 !important;flex:1 1 auto !important;text-align:left;padding-top:0 !important;font-size:12px;}
+#slider .panel:nth-child(4) table td:not(.label){order:1 !important;flex:0 0 auto !important;}
+
+/* API card: put each IP and its Block/Delete buttons on one compact line */
+#slider .panel:nth-child(5) table.border{display:block !important;width:100% !important;max-width:100% !important;}
+#slider .panel:nth-child(5) table.border tbody{display:block !important;width:100% !important;}
+#slider .panel:nth-child(5) table.border tr{display:flex !important;align-items:center;gap:10px;padding:3px 0;}
+#slider .panel:nth-child(5) table.border td{padding:0 !important;display:flex;align-items:center;}
+#slider .panel:nth-child(5) table.border td:first-child{flex:1 1 auto;min-width:0;padding-right:10px !important;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+#slider .panel:nth-child(5) table.border td:last-child{flex:0 0 132px;justify-content:flex-end;}
+#slider .panel:nth-child(5) table.border form{display:inline-flex !important;gap:6px;margin:0 !important;}
+#slider .panel:nth-child(5) table.border input[type=submit]{padding:4px 12px !important;font-size:11px !important;border-radius:8px !important;margin:0 !important;}
+
+@media (max-width:1000px){#slider .scrollContainer{column-count:1 !important;}#slider .panel:nth-child(4) table tbody{column-count:2;}}
 
 /* ==========================================================================
    RESPONSIVE
