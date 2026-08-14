@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         STMPE-Enriched
 // @namespace    https://broadcasthe.net/
-// @version      1.9.0
+// @version      1.10.0
 // @description  A combination of userscripts that enrich the TV series experience, all managed from one panel on your profile settings page. Features: Sonarr Integration, Fanart.tv Logo, IMDb Parents Guide, Trending Shows, Artwork Placeholders, Hide Empty Requests, Collapse Old Seasons, Trailer Player (fixed), Cast Row (TMDb), Enhanced Series Summary, Stamps Row, and Fan Art Carousels.
 // @author       Prism16
 // @match        *://broadcasthe.net/*
@@ -41,6 +41,7 @@
   const STORE_KEY = 'btn_sonarr_servers_v1';
   const FEAT_KEY  = 'btn_userscript_features_v1';
   const KEYS_KEY  = 'btn_userscript_keys_v1';
+  const OPTS_KEY  = 'btn_userscript_opts_v1';
 
   const GMstore = {
     get(key, def) {
@@ -78,6 +79,17 @@
     };
   }
 
+  /* ---- TMDb list options for the homepage row ---- */
+  const TMDB_LISTS = [
+    { value: 'trending_day',  label: 'Trending Today',      path: '/trending/tv/day',  title: 'Trending Today' },
+    { value: 'trending_week', label: 'Trending This Week',  path: '/trending/tv/week', title: 'Trending This Week' },
+    { value: 'popular',       label: 'Popular',             path: '/tv/popular',       title: 'Popular Shows' },
+    { value: 'top_rated',     label: 'Top Rated',           path: '/tv/top_rated',     title: 'Top Rated Shows' },
+    { value: 'airing_today',  label: 'Airing Today',        path: '/tv/airing_today',  title: 'Airing Today' },
+    { value: 'on_the_air',    label: 'On The Air (this week)', path: '/tv/on_the_air',  title: 'On The Air' }
+  ];
+  const TMDB_LIST_DEFAULT = 'trending_day';
+
   /* ---- feature flags (Userscript Manager) ---- */
   const FEATURE_DEFS = [
     { id: 'sonarr', name: 'Sonarr Integration', def: true,
@@ -89,9 +101,10 @@
       desc: 'Fetch the show’s HD clear logo from fanart.tv and place it at the top of the series sidebar.' },
     { id: 'parents', name: 'IMDb Parents Guide', def: true,
       desc: 'Show a colour-coded Parents Guide (nudity, violence, profanity, etc.) as category cards below the torrent table on series pages, with a UK certificate badge and 7-day caching.' },
-    { id: 'trending', name: 'Trending Shows (Homepage)', def: true, needsKey: true, keyLabel: 'TMDb API Key',
+    { id: 'trending', name: 'Homepage TMDb Row', def: true, needsKey: true, keyLabel: 'TMDb API Key',
       defKey: '75c8f6d3dd058fe33f10db544d0cbb6b', keyPlaceholder: 'Your TMDb API v3 key',
-      desc: 'Add a row of today’s trending TV shows from TMDb to the top of the homepage, each linking to a BTN series search.' },
+      select: { label: 'Show', options: TMDB_LISTS, default: TMDB_LIST_DEFAULT },
+      desc: 'Add a row of TV shows from TMDb to the top of the homepage — pick the list below (Trending, Popular, Airing Today…). Each poster links to a BTN series search, with an info card on hover.' },
     { id: 'placeholder', name: 'Artwork Placeholders', def: true,
       desc: 'Replace BTN’s default “No Poster / No Banner / No Fan Art” images with a clean placeholder that matches the theme — everywhere they appear, including torrent-table thumbnails.' },
     { id: 'hidereq', name: 'Hide Empty Requests', def: true,
@@ -131,15 +144,27 @@
     GMstore.set(KEYS_KEY, JSON.stringify(keysCache));
   }
 
+  /* ---- per-feature options (e.g. the homepage list choice) ---- */
+  let optsCache = {};
+  function getOpt(id, def) {
+    return Object.prototype.hasOwnProperty.call(optsCache, id) ? optsCache[id] : def;
+  }
+  function setOpt(id, val) {
+    optsCache[id] = val;
+    GMstore.set(OPTS_KEY, JSON.stringify(optsCache));
+  }
+
   async function initStorage() {
-    const [rawServers, rawFeat, rawKeys] = await Promise.all([
+    const [rawServers, rawFeat, rawKeys, rawOpts] = await Promise.all([
       GMstore.get(STORE_KEY, '[]'),
       GMstore.get(FEAT_KEY, '{}'),
-      GMstore.get(KEYS_KEY, '{}')
+      GMstore.get(KEYS_KEY, '{}'),
+      GMstore.get(OPTS_KEY, '{}')
     ]);
     serversCache = parseServers(rawServers);
     try { featuresCache = JSON.parse(rawFeat || '{}') || {}; } catch (e) { featuresCache = {}; }
     try { keysCache = JSON.parse(rawKeys || '{}') || {}; } catch (e) { keysCache = {}; }
+    try { optsCache = JSON.parse(rawOpts || '{}') || {}; } catch (e) { optsCache = {}; }
   }
 
   /* =========================================================================
@@ -249,6 +274,13 @@
     font-family:var(--ff,inherit);
   }
   .snr-keyinput:focus{ outline:none; border-color:var(--accent,#1f9dff); box-shadow:0 0 0 3px rgba(31,157,255,.15); }
+  .snr-selrow{ margin-top:9px; }
+  .snr-selrow > label{ display:block; margin-bottom:5px; color:var(--text-2,#9aa4b2); font-weight:600; font-size:11.5px; }
+  .snr-selinput{
+    width:100%; padding:7px 10px; background:var(--bg-1,#0c0e12); color:var(--text,#f4f7fb);
+    border:1px solid var(--line-2,#2d333c); border-radius:8px; font-size:12.5px; font-family:var(--ff,inherit); cursor:pointer;
+  }
+  .snr-selinput:focus{ outline:none; border-color:var(--accent,#1f9dff); box-shadow:0 0 0 3px rgba(31,157,255,.15); }
 
   /* toggle switch */
   .snr-switch{ position:relative; width:42px; height:23px; flex:0 0 auto; display:inline-block; cursor:pointer; margin-top:2px; }
@@ -467,8 +499,14 @@
         `data-lpignore="true" data-1p-ignore data-bwignore data-form-type="other" ` +
         `data-key-id="${escapeAttr(f.id)}" value="${escapeAttr(getKey(f.id))}" ` +
         `placeholder="${escapeAttr(f.keyPlaceholder || 'Paste your API key')}"></div>` : '';
+      // Dropdown option (e.g. which TMDb list the homepage row shows).
+      const selHtml = f.select ?
+        `<div class="snr-selrow"><label>${escapeHtml(f.select.label || 'Option')}</label>` +
+        `<select class="snr-selinput" data-sel-id="${escapeAttr(f.id)}">` +
+        f.select.options.map(o => `<option value="${escapeAttr(o.value)}" ${getOpt(f.id, f.select.default) === o.value ? 'selected' : ''}>${escapeHtml(o.label)}</option>`).join('') +
+        `</select></div>` : '';
       row.innerHTML =
-        `<div class="meta"><b>${escapeHtml(f.name)}</b><div class="d">${escapeHtml(f.desc)}</div>${keyHtml}</div>` +
+        `<div class="meta"><b>${escapeHtml(f.name)}</b><div class="d">${escapeHtml(f.desc)}</div>${keyHtml}${selHtml}</div>` +
         `<label class="snr-switch"><input type="checkbox" ${isEnabled(f.id) ? 'checked' : ''}>` +
         `<span class="track"></span><span class="thumb"></span></label>`;
       row.querySelector('.snr-switch input').addEventListener('change', (e) => {
@@ -480,6 +518,10 @@
         const save = () => setKey(keyInput.dataset.keyId, keyInput.value.trim());
         keyInput.addEventListener('change', save);
         keyInput.addEventListener('blur', save);
+      }
+      const selInput = row.querySelector('.snr-selinput');
+      if (selInput) {
+        selInput.addEventListener('change', () => setOpt(selInput.dataset.selId, selInput.value));
       }
       p.appendChild(row);
     });
@@ -1337,6 +1379,42 @@
   /* =========================================================================
    * FEATURE: Trending Shows (homepage, TMDb trending-TV row)
    * =======================================================================*/
+  // Shared hover info card for the homepage row.
+  let trTip = null;
+  function trEnsureTip() {
+    if (trTip) return trTip;
+    trTip = document.createElement('div');
+    trTip.id = 'snr-tr-tip'; trTip.className = 'snr';
+    trTip.innerHTML = '<img class="tip-bg" alt=""><div class="tip-body"><div class="tip-title"></div><div class="tip-meta"></div><div class="tip-ov"></div></div>';
+    document.body.appendChild(trTip);
+    return trTip;
+  }
+  function trShowTip(el, d) {
+    const tip = trEnsureTip();
+    const bg = tip.querySelector('.tip-bg');
+    const src = d.backdrop_path ? ('https://image.tmdb.org/t/p/w500' + d.backdrop_path)
+             : (d.poster_path ? ('https://image.tmdb.org/t/p/w500' + d.poster_path) : '');
+    if (src) { bg.style.display = ''; bg.src = src; } else { bg.style.display = 'none'; }
+    tip.querySelector('.tip-title').textContent = d.name || d.original_name || 'Unknown';
+    const yr = (d.first_air_date || '').slice(0, 4);
+    const rating = d.vote_average ? ('★ ' + Number(d.vote_average).toFixed(1)) : '';
+    tip.querySelector('.tip-meta').innerHTML =
+      (rating ? '<span class="tip-star">' + rating + '</span>' : '') +
+      (yr ? '<span>' + yr + '</span>' : '');
+    tip.querySelector('.tip-ov').textContent = d.overview || 'No description available.';
+    // Position: prefer below the poster (the row sits near the page top), flip
+    // above if there isn't room.
+    tip.classList.add('show'); // make it measurable
+    const r = el.getBoundingClientRect();
+    const tw = tip.offsetWidth || 330, th = tip.offsetHeight || 300;
+    let left = r.left + r.width / 2 - tw / 2;
+    left = Math.max(10, Math.min(left, window.innerWidth - tw - 10));
+    let top = r.bottom + 10;
+    if (top + th > window.innerHeight - 10) top = Math.max(10, r.top - th - 10);
+    tip.style.left = left + 'px'; tip.style.top = top + 'px';
+  }
+  function trHideTip() { if (trTip) trTip.classList.remove('show'); }
+
   function runTrending() {
     if (document.getElementById('snr-trending')) return;
     const key = (getKey('trending') || '').trim();
@@ -1344,13 +1422,25 @@
     const mainColumn = document.querySelector('#content > div.thin > div.main_column') || document.querySelector('.main_column');
     if (!mainColumn) return;
 
+    const listVal = getOpt('trending', TMDB_LIST_DEFAULT);
+    const list = TMDB_LISTS.find(l => l.value === listVal) || TMDB_LISTS[0];
+
     injectCss('snr-trending-style', `
-      #snr-trending .snr-tr-grid{ display:flex; flex-wrap:wrap; gap:1.5%; }
-      #snr-trending .snr-tr-item{ width:12.7%; margin-bottom:10px; }
-      #snr-trending .snr-tr-item img{ width:100%; border-radius:6px; display:block; box-shadow:0 3px 10px rgba(0,0,0,.4); }
-      #snr-trending .snr-tr-name{ text-align:center; cursor:pointer; font-size:12px; margin-top:5px; line-height:1.3; color:var(--text-1,#cdd4de); }
-      #snr-trending .snr-tr-name:hover{ color:var(--accent-bright,#3fc8ff); }
+      #snr-trending .snr-tr-grid{ display:flex; flex-wrap:wrap; gap:1.5%; padding:12px; }
+      #snr-trending .snr-tr-item{ width:12.7%; margin-bottom:10px; cursor:pointer; }
+      #snr-trending .snr-tr-item img{ width:100%; border-radius:6px; display:block; box-shadow:0 3px 10px rgba(0,0,0,.4); transition:transform .12s, box-shadow .12s; }
+      #snr-trending .snr-tr-item:hover img{ transform:translateY(-3px); box-shadow:0 8px 22px rgba(0,0,0,.55); }
+      #snr-trending .snr-tr-name{ text-align:center; font-size:12px; margin-top:5px; line-height:1.3; color:var(--text-1,#cdd4de); }
+      #snr-trending .snr-tr-item:hover .snr-tr-name{ color:var(--accent-bright,#3fc8ff); }
       @media (max-width:900px){ #snr-trending .snr-tr-item{ width:23%; } }
+      #snr-tr-tip{ position:fixed; z-index:2147483000; width:330px; background:var(--bg-2,#12151a); border:1px solid var(--line,#232830); border-radius:12px; overflow:hidden; box-shadow:0 20px 55px rgba(0,0,0,.65); opacity:0; pointer-events:none; transition:opacity .12s, transform .12s; transform:translateY(4px); }
+      #snr-tr-tip.show{ opacity:1; transform:translateY(0); }
+      #snr-tr-tip .tip-bg{ width:100%; height:150px; object-fit:cover; background:var(--bg-3,#181c22); display:block; }
+      #snr-tr-tip .tip-body{ padding:12px 14px; }
+      #snr-tr-tip .tip-title{ font-weight:700; font-size:14px; color:var(--text,#f4f7fb); line-height:1.3; }
+      #snr-tr-tip .tip-meta{ font-size:12px; color:var(--text-2,#9aa4b2); margin:5px 0 8px; display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
+      #snr-tr-tip .tip-star{ color:#f4c04e; font-weight:700; }
+      #snr-tr-tip .tip-ov{ font-size:12px; color:var(--text-1,#cdd4de); line-height:1.5; max-height:8.4em; overflow:hidden; }
     `);
 
     const box = document.createElement('div');
@@ -1359,39 +1449,39 @@
     const head = document.createElement('div');
     head.className = 'head';
     head.style.fontWeight = 'bold';
-    head.textContent = 'Trending Shows From TMDb';
+    head.textContent = list.title + ' From TMDb';
     box.appendChild(head);
     const grid = document.createElement('div');
     grid.className = 'snr-tr-grid pad';
-    grid.style.padding = '12px';
     box.appendChild(grid);
     mainColumn.insertBefore(box, mainColumn.firstChild);
 
     const api = (path) => 'https://api.themoviedb.org/3' + path + (path.indexOf('?') >= 0 ? '&' : '?') + 'api_key=' + encodeURIComponent(key);
 
-    fetch(api('/trending/tv/day?language=en-US'))
+    fetch(api(list.path + '?language=en-US'))
       .then(r => r.json())
       .then(data => {
-        const shows = (data && data.results ? data.results : []).slice(0, 7);
-        shows.forEach(show => {
-          fetch(api('/tv/' + show.id))
-            .then(r => r.json())
-            .then(showData => {
-              if (!showData) return;
-              const item = document.createElement('div');
-              item.className = 'snr-tr-item';
-              const img = document.createElement('img');
-              img.src = showData.poster_path ? ('https://media.themoviedb.org/t/p/w440_and_h660_face' + showData.poster_path) : '';
-              img.alt = showData.name || '';
-              const name = document.createElement('div');
-              name.className = 'snr-tr-name';
-              name.textContent = showData.name || '';
-              name.onclick = () => { window.location.href = 'https://broadcasthe.net/series.php?name=' + encodeURIComponent(showData.name || ''); };
-              item.appendChild(img);
-              item.appendChild(name);
-              grid.appendChild(item);
-            })
-            .catch(() => {});
+        const seen = {};
+        const shows = (data && data.results ? data.results : [])
+          .filter(d => d && d.poster_path)
+          .filter(d => { const k = (d.name || d.original_name || '').toLowerCase(); if (seen[k]) return false; seen[k] = 1; return true; })
+          .slice(0, 7);
+        shows.forEach(d => {
+          const item = document.createElement('div');
+          item.className = 'snr-tr-item';
+          const img = document.createElement('img');
+          img.loading = 'lazy';
+          img.src = 'https://image.tmdb.org/t/p/w342' + d.poster_path;
+          img.alt = d.name || '';
+          const name = document.createElement('div');
+          name.className = 'snr-tr-name';
+          name.textContent = d.name || d.original_name || '';
+          item.appendChild(img);
+          item.appendChild(name);
+          item.addEventListener('click', () => { window.location.href = 'https://broadcasthe.net/series.php?name=' + encodeURIComponent(d.name || d.original_name || ''); });
+          item.addEventListener('mouseenter', () => trShowTip(item, d));
+          item.addEventListener('mouseleave', trHideTip);
+          grid.appendChild(item);
         });
       })
       .catch((e) => { console.warn('[STMPE-Trending] fetch failed', e); });
