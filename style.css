@@ -939,19 +939,15 @@ body#torrents #content .thin>.main_column{grid-column:2;grid-row:3;align-self:st
   .pad,.box .pad{padding:13px 13px;}
 }
 
-/* ===== Image lightbox — proper centred modal pop-up =====================
-   When you click an image to view it (forum posts, PMs, comments) Gazelle
-   appends #curtain (a backdrop) and #lightbox (the full image) to <body>.
-   Without positioning they land at the bottom of the page in normal flow
-   with no dimming — so you have to scroll to find the image. Restore them as
-   a fixed, dimmed, centred pop-up sized to ~70% of the viewport width. */
-#curtain{
-  position:fixed !important; top:0 !important; left:0 !important;
-  width:100vw !important; height:100vh !important; margin:0 !important; padding:0 !important;
-  background:rgba(6,8,12,.85) !important; opacity:1 !important;
-  z-index:2147483000 !important; display:block !important; cursor:pointer;
-}
-#lightbox{
+/* ===== Image lightbox — centred dim modal (forums, PMs, comments) ========
+   #lightbox and #curtain sit empty in the page on EVERY page. They must stay
+   hidden until you actually click an image to view it — the site fills
+   #lightbox with an <img> to show it (and empties it to close). So: hide both
+   by default, and only reveal the modal + dim backdrop while #lightbox holds
+   an image. #curtain is the sibling that follows #lightbox. */
+#lightbox,#curtain{ display:none !important; }
+#lightbox:has(img){
+  display:block !important;
   position:fixed !important; top:50% !important; left:50% !important;
   transform:translate(-50%,-50%) !important;
   width:auto !important; height:auto !important;
@@ -960,7 +956,14 @@ body#torrents #content .thin>.main_column{grid-column:2;grid-row:3;align-self:st
   background:transparent !important; border:0 !important;
   z-index:2147483001 !important; text-align:center; cursor:pointer;
 }
-#lightbox img{
+#lightbox:has(img) ~ #curtain{
+  display:block !important;
+  position:fixed !important; top:0 !important; left:0 !important;
+  width:100vw !important; height:100vh !important; margin:0 !important; padding:0 !important;
+  background:rgba(6,8,12,.85) !important; opacity:1 !important;
+  z-index:2147483000 !important; cursor:pointer;
+}
+#lightbox:has(img) img{
   max-width:70vw !important; max-height:88vh !important;
   width:auto !important; height:auto !important;
   display:block; margin:0 auto !important;
