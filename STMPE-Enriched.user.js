@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         STMPE-Enriched
 // @namespace    https://broadcasthe.net/
-// @version      1.8.0
+// @version      1.9.0
 // @description  A combination of userscripts that enrich the TV series experience, all managed from one panel on your profile settings page. Features: Sonarr Integration, Fanart.tv Logo, IMDb Parents Guide, Trending Shows, Artwork Placeholders, Hide Empty Requests, Collapse Old Seasons, Trailer Player (fixed), Cast Row (TMDb), Enhanced Series Summary, Stamps Row, and Fan Art Carousels.
 // @author       Prism16
 // @match        *://broadcasthe.net/*
@@ -105,7 +105,9 @@
     { id: 'stamps', name: 'Stamps Row', def: true,
       desc: 'Move the Buy Stamps panel out of the sidebar into a long horizontal row across the bottom of the main column.' },
     { id: 'artwork', name: 'Fan Art Carousels', def: true,
-      desc: 'Fill the Series Fan Art card with fanart.tv artwork — backgrounds, posters, banners, thumbnails, clear art, character art and logos — as controllable single-image carousels (uses the Fanart.tv key above).' }
+      desc: 'Fill the Series Fan Art card with fanart.tv artwork — backgrounds, posters, banners, thumbnails, clear art, character art and logos — as controllable single-image carousels (uses the Fanart.tv key above).' },
+    { id: 'news', name: 'Collapsible News', def: true,
+      desc: 'Add a collapse toggle to the front-page news post so you can hide it once you’ve read it. It remembers your choice per article, and re-opens automatically when a new news post is published.' }
     // future features slot in here — the manager panel renders whatever is listed.
   ];
   let featuresCache = {};
@@ -369,6 +371,13 @@
   #summary .ess-ep .nm{ font-size:12px; color:var(--text-1,#cdd4de); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
   #summary .ess-ep .dt{ font-size:11.5px; color:var(--text-2,#9aa4b2); margin-top:3px; }
   #summary .ess-ep .cd{ color:var(--accent-bright,#3fc8ff); font-weight:600; }
+
+  /* ---- collapsible front-page news ---- */
+  #news_post .head{ cursor:pointer; user-select:none; }
+  #news_post .head .snr-news-caret{ display:inline-block; width:14px; margin-right:5px; opacity:.85; color:var(--accent-bright,#3fc8ff); font-size:11px; }
+  #news_post .head:hover .snr-news-caret{ opacity:1; }
+  a.snr-news-link{ display:inline-block; padding:4px 2px; font-weight:600; font-size:12.5px; color:var(--accent-bright,#3fc8ff); text-decoration:none; letter-spacing:.02em; }
+  a.snr-news-link:hover{ color:#fff; }
 
   /* ---- stamps row (moved to bottom of main column) ---- */
   #snr-stamps ul.nobullet{ display:flex !important; flex-wrap:wrap; gap:12px; list-style:none; padding:14px 16px 16px; margin:0; }
@@ -2000,6 +2009,78 @@
   }
 
   /* =========================================================================
+   * FEATURE: Collapsible News (homepage)
+   *   Add a collapse caret to the front-page news post's header so it can be
+   *   hidden once read (state remembered per article, so a new post re-opens),
+   *   and replace the [1][2][3][4][5] news pager with a single News Section link.
+   * =======================================================================*/
+  const NEWS_KEY = 'btn_news_collapsed_v1';
+  function newsGetMap() {
+    try {
+      let raw = '{}';
+      if (typeof GM_getValue === 'function') raw = GM_getValue(NEWS_KEY, '{}');
+      else { const v = localStorage.getItem('GM_' + NEWS_KEY); raw = (v == null) ? '{}' : v; }
+      return JSON.parse(raw || '{}') || {};
+    } catch (e) { return {}; }
+  }
+  function newsSaveMap(m) {
+    try {
+      if (typeof GM_setValue === 'function') GM_setValue(NEWS_KEY, JSON.stringify(m));
+      else localStorage.setItem('GM_' + NEWS_KEY, JSON.stringify(m));
+    } catch (e) {}
+  }
+
+  function runNewsCollapse() {
+    const post = document.querySelector('#news_post');
+    if (!post) return false;
+    if (post.dataset.snrNews) return true;
+    const head = post.querySelector('.head');
+    const body = post.querySelector('.pad');
+    if (!head || !body) return false;
+    post.dataset.snrNews = '1';
+
+    // Key the collapsed state by the post's discussion thread id (stable), so a
+    // brand-new news post — a different thread id — starts expanded again.
+    let key = 'news';
+    const disc = head.querySelector('a[href*="thread"]');
+    const m = disc ? ((disc.getAttribute('href') || '').match(/threadid=(\d+)/)) : null;
+    if (m) key = 'news_' + m[1];
+    else { const t = head.querySelector('strong'); if (t) key = 'news_' + t.textContent.trim().toLowerCase().replace(/[^a-z0-9]+/g, '').slice(0, 24); }
+
+    let collapsed = !!newsGetMap()[key];
+    const caret = document.createElement('span');
+    caret.className = 'snr-news-caret';
+    head.insertBefore(caret, head.firstChild);
+    head.style.cursor = 'pointer';
+    const apply = () => { body.style.display = collapsed ? 'none' : ''; caret.textContent = collapsed ? '▸' : '▾'; };
+    apply();
+    head.addEventListener('click', (e) => {
+      if (e.target.closest('a')) return; // let the [Discuss] link work
+      collapsed = !collapsed;
+      const mm = newsGetMap();
+      if (collapsed) mm[key] = 1; else delete mm[key];
+      newsSaveMap(mm);
+      apply();
+    });
+
+    // Replace the [1][2][3][4][5] news pager with a single News Section link.
+    const box = post.parentElement;
+    const pager = box && box.querySelector('.extrapad');
+    if (pager && !pager.dataset.snrNews) {
+      pager.dataset.snrNews = '1';
+      pager.innerHTML = '';
+      const c = document.createElement('center');
+      const a = document.createElement('a');
+      a.className = 'snr-news-link';
+      a.href = 'https://broadcasthe.net/news.php';
+      a.textContent = 'News Section →';
+      c.appendChild(a);
+      pager.appendChild(c);
+    }
+    return true;
+  }
+
+  /* =========================================================================
    * Boot
    * =======================================================================*/
   function tryInject(fn) {
@@ -2087,6 +2168,12 @@
           if (!mc) return false;
           runTrending();
           return true;
+        });
+      }
+      if (isEnabled('news')) {
+        tryInject(() => {
+          if (!document.querySelector('#news_post')) return false;
+          return runNewsCollapse();
         });
       }
     }
