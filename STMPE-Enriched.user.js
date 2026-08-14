@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         STMPE-Enriched
 // @namespace    https://broadcasthe.net/
-// @version      1.11.0
+// @version      1.11.1
 // @description  A combination of userscripts that enrich the TV series experience, all managed from one panel on your profile settings page. Features: Sonarr Integration, Fanart.tv Logo, IMDb Parents Guide, Trending Shows, Artwork Placeholders, Hide Empty Requests, Collapse Old Seasons, Trailer Player (fixed), Cast Row (TMDb), Enhanced Series Summary, Stamps Row, and Fan Art Carousels.
 // @author       Prism16
 // @match        *://broadcasthe.net/*
@@ -1553,13 +1553,22 @@
   const PLACEHOLDER_IDS = ['hIq9qAn', 'qHx6IsI', '55K4Dww']; // shared imgur No Banner / No Poster / No Fan Art
   // BTN's own default artwork (used in Last 5 Uploads / Snatches etc.), matched by URL fragment.
   const PLACEHOLDER_URLS = ['/common/posters/noposter', '/noposter.', '/nobanner.', '/noartwork', 'no_poster', 'no-image', 'noimage'];
+  // BTN's default "no avatar" image (comment / forum poster sidebar). Handled as
+  // a SQUARE placeholder rather than a tall poster so it matches the avatar column.
+  const AVATAR_URLS = ['/avatars/default', 'avatars/default'];
   const PH_C = { bg1: '#141821', bg2: '#0a0c10', line: '#2b313b', accent: '#1f9dff', accentB: '#3fc8ff', text: '#e8edf4', muted: '#7d8794' };
 
   function phIsDefault(src) {
     if (!src) return false;
     if (PLACEHOLDER_IDS.some(id => src.indexOf('/' + id) !== -1)) return true;
     const low = src.toLowerCase();
+    if (AVATAR_URLS.some(u => low.indexOf(u) !== -1)) return true;
     return PLACEHOLDER_URLS.some(u => low.indexOf(u) !== -1);
+  }
+  function phIsAvatar(src) {
+    if (!src) return false;
+    const low = src.toLowerCase();
+    return AVATAR_URLS.some(u => low.indexOf(u) !== -1);
   }
   function phWrap(t, maxChars, maxLines) {
     const words = (t || '').replace(/\s*\(\d{4}\)\s*$/, '').split(/\s+/).filter(Boolean);
@@ -1624,11 +1633,46 @@
 </svg>`);
   }
 
+  function phAvatarSvg(name) {
+    const lines = phWrap(name, 16, 2);
+    const startY = 226;
+    const tspans = lines.map((ln, i) =>
+      `<text x='150' y='${startY + i * 24}' text-anchor='middle' font-family='Segoe UI,Roboto,Helvetica,Arial,sans-serif' font-size='17' font-weight='600' fill='${PH_C.text}'>${phEsc(ln)}</text>`
+    ).join('');
+    return phDataUri(
+`<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 300' preserveAspectRatio='xMidYMid slice'>
+  <defs>
+    <linearGradient id='ga' x1='0' y1='0' x2='0' y2='1'><stop offset='0' stop-color='${PH_C.bg1}'/><stop offset='1' stop-color='${PH_C.bg2}'/></linearGradient>
+    <radialGradient id='gla' cx='0.5' cy='0.4' r='0.6'><stop offset='0' stop-color='${PH_C.accent}' stop-opacity='0.18'/><stop offset='1' stop-color='${PH_C.accent}' stop-opacity='0'/></radialGradient>
+  </defs>
+  <rect width='300' height='300' fill='url(#ga)'/>
+  <rect width='300' height='300' fill='url(#gla)'/>
+  <rect x='6' y='6' width='288' height='288' rx='12' fill='none' stroke='${PH_C.line}' stroke-width='1.5'/>
+  <g transform='translate(150,122)' fill='none' stroke='${PH_C.accentB}' stroke-opacity='0.6' stroke-width='7' stroke-linecap='round'>
+    <path d='M 21 -36.4 A 42 42 0 1 1 -21 -36.4'/><line x1='0' y1='-50' x2='0' y2='-8'/>
+  </g>
+  <text x='150' y='194' text-anchor='middle' font-family='Segoe UI,Roboto,Helvetica,Arial,sans-serif' font-size='12' font-weight='700' letter-spacing='3' fill='${PH_C.muted}'>NO AVATAR</text>
+  ${tspans}
+</svg>`);
+  }
+
   function phReplace(img) {
     try {
       if (!img || img.dataset.snrPh) return;
       const src = img.currentSrc || img.src || img.getAttribute('src') || '';
       if (!phIsDefault(src)) return;
+      // Default "no avatar" → square themed placeholder sized to the avatar column.
+      if (phIsAvatar(src)) {
+        img.dataset.snrPh = '1';
+        img.onerror = null; img.removeAttribute('onerror'); img.removeAttribute('srcset');
+        const name = (img.alt || '').replace(/['’]s avatar$/i, '').trim();
+        const side = parseInt(img.getAttribute('width'), 10) || img.offsetWidth || img.naturalWidth || 150;
+        img.src = phAvatarSvg(name);
+        img.removeAttribute('height');
+        img.style.setProperty('width', side + 'px', 'important');
+        img.style.setProperty('height', side + 'px', 'important');
+        return;
+      }
       let w = img.naturalWidth || 0, h = img.naturalHeight || 0;
       if (!w || !h) { w = w || parseInt(img.getAttribute('width'), 10) || 0; h = h || parseInt(img.getAttribute('height'), 10) || 0; }
       // Aspect ratio decides poster vs banner. If we can't tell yet (image not
