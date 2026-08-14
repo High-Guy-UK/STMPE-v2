@@ -814,68 +814,85 @@ body#torrents #content .thin>.main_column{grid-column:2;grid-row:3;align-self:st
    card matching the rest of the site, flowed across two columns.
    ========================================================================== */
 /* settings page doesn't have a sidebar/banner, so drop the series-page grid */
-#content .thin:has(#slider){display:block !important;grid-template-columns:none !important;grid-template-rows:none !important;}
-#content #slider{width:auto !important;max-width:none !important;float:none !important;margin:0 !important;display:block !important;}
-#slider>h2{margin:0 0 16px !important;font-size:18px;}
+#content .thin.useredit:has(#slider){display:block !important;grid-template-columns:none !important;grid-template-rows:none !important;}
+#content .useredit #slider{width:auto !important;max-width:none !important;float:none !important;margin:0 !important;display:block !important;}
+.useredit #slider>h2{margin:0 0 16px !important;font-size:18px;}
 /* the carousel nav is redundant once every section is visible */
-#slider ul.navigation{display:none !important;}
+.useredit #slider ul.navigation{display:none !important;}
 /* unclip the slider window and turn the sliding track into a 2-column masonry */
-#slider .scroll{overflow:visible !important;width:auto !important;height:auto !important;position:static !important;}
-#slider .scrollContainer{width:auto !important;height:auto !important;left:0 !important;top:auto !important;position:static !important;display:block !important;column-count:2 !important;column-gap:18px !important;transform:none !important;}
-#slider .scrollContainer>.panel{float:none !important;width:100% !important;min-width:0 !important;display:inline-block !important;position:static !important;left:auto !important;margin:0 0 18px !important;padding:0 20px 18px !important;background:var(--bg-2) !important;border:1px solid var(--line) !important;border-radius:12px !important;box-sizing:border-box !important;break-inside:avoid !important;-webkit-column-break-inside:avoid !important;vertical-align:top;}
+.useredit #slider .scroll{overflow:visible !important;width:auto !important;height:auto !important;position:static !important;}
+.useredit #slider .scrollContainer{width:auto !important;height:auto !important;left:0 !important;top:auto !important;position:static !important;display:block !important;column-count:2 !important;column-gap:18px !important;transform:none !important;}
+.useredit #slider .scrollContainer>.panel{float:none !important;width:100% !important;min-width:0 !important;display:inline-block !important;position:static !important;left:auto !important;margin:0 0 18px !important;padding:0 20px 18px !important;background:var(--bg-2) !important;border:1px solid var(--line) !important;border-radius:12px !important;box-sizing:border-box !important;break-inside:avoid !important;-webkit-column-break-inside:avoid !important;vertical-align:top;}
 /* card title header per section */
-#slider .scrollContainer>.panel::before{display:block;font-family:var(--fd);font-weight:600;font-size:14px;color:var(--text-1);letter-spacing:.01em;padding:14px 0 12px;margin-bottom:12px;border-bottom:1px solid var(--line);}
-#slider .scrollContainer>.panel:nth-child(1)::before{content:"Layout";}
-#slider .scrollContainer>.panel:nth-child(2)::before{content:"Preferences";}
-#slider .scrollContainer>.panel:nth-child(3)::before{content:"User Info";}
-#slider .scrollContainer>.panel:nth-child(4)::before{content:"IRC";}
-#slider .scrollContainer>.panel:nth-child(5)::before{content:"API";}
-#slider .scrollContainer>.panel:nth-child(6)::before{content:"Password";}
-#slider .panel table{width:100% !important;}
-#slider .panel td.label{width:190px;vertical-align:top;padding-top:9px;}
-#slider .panel input[type=text],#slider .panel input[type=password],#slider .panel input[type=email],#slider .panel input[type=url],#slider .panel select,#slider .panel textarea{max-width:100% !important;box-sizing:border-box;}
+.useredit #slider .scrollContainer>.panel::before{display:block;font-family:var(--fd);font-weight:600;font-size:14px;color:var(--text-1);letter-spacing:.01em;padding:14px 0 12px;margin-bottom:12px;border-bottom:1px solid var(--line);}
+.useredit #slider .scrollContainer>.panel:nth-child(1)::before{content:"Layout";}
+.useredit #slider .scrollContainer>.panel:nth-child(2)::before{content:"Preferences";}
+.useredit #slider .scrollContainer>.panel:nth-child(3)::before{content:"User Info";}
+.useredit #slider .scrollContainer>.panel:nth-child(4)::before{content:"IRC";}
+.useredit #slider .scrollContainer>.panel:nth-child(5)::before{content:"API";}
+.useredit #slider .scrollContainer>.panel:nth-child(6)::before{content:"Password";}
+.useredit #slider .panel table{width:100% !important;}
+.useredit #slider .panel td.label{width:190px;vertical-align:top;padding-top:9px;}
+.useredit #slider .panel input[type=text],.useredit #slider .panel input[type=password],.useredit #slider .panel input[type=email],.useredit #slider .panel input[type=url],.useredit #slider .panel select,.useredit #slider .panel textarea{max-width:100% !important;box-sizing:border-box;}
 
 /* IRC card: flow the long channel list into 3 short columns (checkbox left, name
    after). The table must be display:block so the multi-column tbody stays inside
    the card instead of overflowing off the right edge. */
-#slider .panel:nth-child(4) table.border{display:block !important;width:100% !important;max-width:100% !important;box-sizing:border-box;}
-#slider .panel:nth-child(4) table tbody{display:block !important;column-count:3;column-gap:22px;}
-#slider .panel:nth-child(4) table tr{display:flex !important;align-items:center;gap:8px;break-inside:avoid;padding:3px 0;}
-#slider .panel:nth-child(4) table tr:first-child{column-span:all;display:block !important;padding:0 0 10px;color:var(--text-2);}
-#slider .panel:nth-child(4) table td{padding:0 !important;width:auto !important;vertical-align:middle;}
-#slider .panel:nth-child(4) table td.label{order:2 !important;flex:1 1 auto !important;text-align:left;padding-top:0 !important;font-size:12px;}
-#slider .panel:nth-child(4) table td:not(.label){order:1 !important;flex:0 0 auto !important;}
+.useredit #slider .panel:nth-child(4) table.border{display:block !important;width:100% !important;max-width:100% !important;box-sizing:border-box;}
+.useredit #slider .panel:nth-child(4) table tbody{display:block !important;column-count:3;column-gap:22px;}
+.useredit #slider .panel:nth-child(4) table tr{display:flex !important;align-items:center;gap:8px;break-inside:avoid;padding:3px 0;}
+.useredit #slider .panel:nth-child(4) table tr:first-child{column-span:all;display:block !important;padding:0 0 10px;color:var(--text-2);}
+.useredit #slider .panel:nth-child(4) table td{padding:0 !important;width:auto !important;vertical-align:middle;}
+.useredit #slider .panel:nth-child(4) table td.label{order:2 !important;flex:1 1 auto !important;text-align:left;padding-top:0 !important;font-size:12px;}
+.useredit #slider .panel:nth-child(4) table td:not(.label){order:1 !important;flex:0 0 auto !important;}
 /* the IRC-key / usage / save rows sit inside the same table (colspan cells); pull them
    out of the 3-column flow and lay them full-width along the bottom of the card */
-#slider .panel:nth-child(4) table tr:has(td[colspan]):not(:first-child){column-span:all !important;display:flex !important;flex-wrap:wrap;align-items:center;gap:10px;padding:8px 0 0 !important;}
-#slider .panel:nth-child(4) table tr:has(td[colspan]):not(:first-child) td{order:0 !important;flex:0 0 auto !important;width:auto !important;padding:0 !important;display:inline-flex;align-items:center;font-size:12px;}
-#slider .panel:nth-child(4) table tr:has(input[type=text]):not(:first-child){border-top:1px solid var(--line);margin-top:8px;padding-top:12px !important;}
-#slider .panel:nth-child(4) table tr:has(input[type=text]) td.label{flex:0 0 auto !important;}
-#slider .panel:nth-child(4) table tr:has(input[type=text]) input[type=text]{width:100% !important;max-width:480px !important;flex:1 1 320px;}
+.useredit #slider .panel:nth-child(4) table tr:has(td[colspan]):not(:first-child){column-span:all !important;display:flex !important;flex-wrap:wrap;align-items:center;gap:10px;padding:8px 0 0 !important;}
+.useredit #slider .panel:nth-child(4) table tr:has(td[colspan]):not(:first-child) td{order:0 !important;flex:0 0 auto !important;width:auto !important;padding:0 !important;display:inline-flex;align-items:center;font-size:12px;}
+.useredit #slider .panel:nth-child(4) table tr:has(input[type=text]):not(:first-child){border-top:1px solid var(--line);margin-top:8px;padding-top:12px !important;}
+.useredit #slider .panel:nth-child(4) table tr:has(input[type=text]) td.label{flex:0 0 auto !important;}
+.useredit #slider .panel:nth-child(4) table tr:has(input[type=text]) input[type=text]{width:100% !important;max-width:480px !important;flex:1 1 320px;}
 
 /* API card. There are TWO tables: the first is the API-key/security settings,
    the second is the IP allow/block list. Only the IP list gets the one-line
    treatment (each IP + its Block/Delete on a single row). */
-#slider .panel:nth-child(5) table.border:last-of-type{display:block !important;width:100% !important;max-width:100% !important;}
-#slider .panel:nth-child(5) table.border:last-of-type tbody{display:block !important;width:100% !important;}
-#slider .panel:nth-child(5) table.border:last-of-type tr{display:flex !important;align-items:center;gap:10px;padding:3px 0;}
-#slider .panel:nth-child(5) table.border:last-of-type td{padding:0 !important;display:flex;align-items:center;}
-#slider .panel:nth-child(5) table.border:last-of-type td:first-child{flex:1 1 auto;min-width:0;padding-right:10px !important;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-#slider .panel:nth-child(5) table.border:last-of-type td:last-child{flex:0 0 132px;justify-content:flex-end;}
-#slider .panel:nth-child(5) table.border:last-of-type form{display:inline-flex !important;gap:6px;margin:0 !important;}
-#slider .panel:nth-child(5) table.border:last-of-type input[type=submit]{padding:4px 12px !important;font-size:11px !important;border-radius:8px !important;margin:0 !important;}
+.useredit #slider .panel:nth-child(5) table.border:last-of-type{display:block !important;width:100% !important;max-width:100% !important;}
+.useredit #slider .panel:nth-child(5) table.border:last-of-type tbody{display:block !important;width:100% !important;}
+.useredit #slider .panel:nth-child(5) table.border:last-of-type tr{display:flex !important;align-items:center;gap:10px;padding:3px 0;}
+.useredit #slider .panel:nth-child(5) table.border:last-of-type td{padding:0 !important;display:flex;align-items:center;}
+.useredit #slider .panel:nth-child(5) table.border:last-of-type td:first-child{flex:1 1 auto;min-width:0;padding-right:10px !important;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.useredit #slider .panel:nth-child(5) table.border:last-of-type td:last-child{flex:0 0 132px;justify-content:flex-end;}
+.useredit #slider .panel:nth-child(5) table.border:last-of-type form{display:inline-flex !important;gap:6px;margin:0 !important;}
+.useredit #slider .panel:nth-child(5) table.border:last-of-type input[type=submit]{padding:4px 12px !important;font-size:11px !important;border-radius:8px !important;margin:0 !important;}
 /* API settings table (first): keep a clean, contained label|value layout, and lift
    the "API documentation" link up onto the "API Security" heading line (top-right) */
-#slider .panel:nth-child(5) table.border:first-of-type{display:table !important;width:100% !important;max-width:100% !important;table-layout:auto !important;position:relative;box-sizing:border-box;}
-#slider .panel:nth-child(5) table.border:first-of-type tbody{display:table-row-group !important;}
-#slider .panel:nth-child(5) table.border:first-of-type tr{display:table-row !important;padding:0 !important;}
-#slider .panel:nth-child(5) table.border:first-of-type td{display:table-cell !important;padding:7px 10px 7px 0 !important;overflow:visible !important;text-overflow:clip !important;white-space:normal !important;vertical-align:top;}
-#slider .panel:nth-child(5) table.border:first-of-type td.label{width:150px !important;white-space:nowrap;}
-#slider .panel:nth-child(5) table.border:first-of-type input[type=text]{max-width:300px !important;}
-#slider .panel:nth-child(5) table.border:first-of-type p{margin:4px 0 0 !important;}
-#slider .panel:nth-child(5) table.border:first-of-type p:has(a){position:absolute !important;top:2px;right:2px;margin:0 !important;text-align:right;font-size:12px;line-height:1.45;max-width:330px;}
+.useredit #slider .panel:nth-child(5) table.border:first-of-type{display:table !important;width:100% !important;max-width:100% !important;table-layout:auto !important;position:relative;box-sizing:border-box;}
+.useredit #slider .panel:nth-child(5) table.border:first-of-type tbody{display:table-row-group !important;}
+.useredit #slider .panel:nth-child(5) table.border:first-of-type tr{display:table-row !important;padding:0 !important;}
+.useredit #slider .panel:nth-child(5) table.border:first-of-type td{display:table-cell !important;padding:7px 10px 7px 0 !important;overflow:visible !important;text-overflow:clip !important;white-space:normal !important;vertical-align:top;}
+.useredit #slider .panel:nth-child(5) table.border:first-of-type td.label{width:150px !important;white-space:nowrap;}
+.useredit #slider .panel:nth-child(5) table.border:first-of-type input[type=text]{max-width:300px !important;}
+.useredit #slider .panel:nth-child(5) table.border:first-of-type p{margin:4px 0 0 !important;}
+.useredit #slider .panel:nth-child(5) table.border:first-of-type p:has(a){position:absolute !important;top:2px;right:2px;margin:0 !important;text-align:right;font-size:12px;line-height:1.45;max-width:330px;}
 
-@media (max-width:1000px){#slider .scrollContainer{column-count:1 !important;}#slider .panel:nth-child(4) table tbody{column-count:2;}}
+@media (max-width:1000px){.useredit #slider .scrollContainer{column-count:1 !important;}.useredit #slider .panel:nth-child(4) table tbody{column-count:2;}}
+/* ---- Profile view page (user.php?id=) -----------------------------------
+   The profile uses the SAME #slider carousel widget as the settings page,
+   but wrapped in .midbar (settings uses .thin.useredit). Un-carousel it into
+   a clean 2-column card layout so the panels stop overlapping. The inner
+   .box elements already carry the card styling, so panels are just layout. */
+.midbar #slider{width:auto !important;max-width:none !important;float:none !important;margin:0 !important;display:block !important;height:auto !important;}
+.midbar #slider ul.navigation{display:none !important;}
+.midbar #slider .scroll{overflow:visible !important;width:auto !important;height:auto !important;position:static !important;}
+.midbar #slider .scrollContainer{width:auto !important;height:auto !important;left:0 !important;top:auto !important;position:static !important;display:block !important;column-count:2 !important;column-gap:18px !important;transform:none !important;}
+/* the carousel JS stamps inline "float:left;position:relative;height:1px" on each
+   panel — override height too or the panels collapse and their content overlaps. */
+.midbar #slider .scrollContainer>.panel{float:none !important;width:100% !important;min-width:0 !important;height:auto !important;min-height:0 !important;display:inline-block !important;position:static !important;left:auto !important;top:auto !important;margin:0 0 18px !important;padding:0 !important;background:transparent !important;border:0 !important;break-inside:avoid !important;-webkit-column-break-inside:avoid !important;vertical-align:top;box-sizing:border-box;}
+.midbar #slider .scrollContainer>.panel::before{content:none !important;display:none !important;}
+/* space the individual cards apart (last one flush so it doesn't double the panel gap) */
+.midbar #slider .panel .box{margin:0 0 18px !important;}
+.midbar #slider .panel .box:last-child{margin-bottom:0 !important;}
+@media (max-width:1000px){.midbar #slider .scrollContainer{column-count:1 !important;}}
 
 /* ==========================================================================
    RESPONSIVE

@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         STMPE-Enriched
 // @namespace    https://broadcasthe.net/
-// @version      1.10.0
+// @version      1.11.0
 // @description  A combination of userscripts that enrich the TV series experience, all managed from one panel on your profile settings page. Features: Sonarr Integration, Fanart.tv Logo, IMDb Parents Guide, Trending Shows, Artwork Placeholders, Hide Empty Requests, Collapse Old Seasons, Trailer Player (fixed), Cast Row (TMDb), Enhanced Series Summary, Stamps Row, and Fan Art Carousels.
 // @author       Prism16
 // @match        *://broadcasthe.net/*
@@ -104,7 +104,7 @@
     { id: 'trending', name: 'Homepage TMDb Row', def: true, needsKey: true, keyLabel: 'TMDb API Key',
       defKey: '75c8f6d3dd058fe33f10db544d0cbb6b', keyPlaceholder: 'Your TMDb API v3 key',
       select: { label: 'Show', options: TMDB_LISTS, default: TMDB_LIST_DEFAULT },
-      desc: 'Add a row of TV shows from TMDb to the top of the homepage — pick the list below (Trending, Popular, Airing Today…). Each poster links to a BTN series search, with an info card on hover.' },
+      desc: 'Add a row of UK/US TV shows from TMDb to the top of the homepage — pick the list below (Trending, Popular, Airing Today…). Each poster links to a BTN series search, with an info card on hover.' },
     { id: 'placeholder', name: 'Artwork Placeholders', def: true,
       desc: 'Replace BTN’s default “No Poster / No Banner / No Fan Art” images with a clean placeholder that matches the theme — everywhere they appear, including torrent-table thumbnails.' },
     { id: 'hidereq', name: 'Hide Empty Requests', def: true,
@@ -1458,12 +1458,18 @@
 
     const api = (path) => 'https://api.themoviedb.org/3' + path + (path.indexOf('?') >= 0 ? '&' : '?') + 'api_key=' + encodeURIComponent(key);
 
-    fetch(api(list.path + '?language=en-US'))
-      .then(r => r.json())
-      .then(data => {
+    // UK/US shows only. Grab two pages so there are still enough after filtering.
+    const isUkUs = d => Array.isArray(d.origin_country) && d.origin_country.some(c => c === 'US' || c === 'GB');
+    Promise.all([
+      fetch(api(list.path + '?language=en-US&page=1')).then(r => r.json()).catch(() => null),
+      fetch(api(list.path + '?language=en-US&page=2')).then(r => r.json()).catch(() => null)
+    ])
+      .then(pages => {
+        const all = pages.filter(Boolean).reduce((a, p) => a.concat((p && p.results) || []), []);
         const seen = {};
-        const shows = (data && data.results ? data.results : [])
+        const shows = all
           .filter(d => d && d.poster_path)
+          .filter(isUkUs)
           .filter(d => { const k = (d.name || d.original_name || '').toLowerCase(); if (seen[k]) return false; seen[k] = 1; return true; })
           .slice(0, 7);
         shows.forEach(d => {
@@ -1544,12 +1550,16 @@
    *   choosing banner vs poster styling from the element's aspect ratio so it
    *   works for banners, sidebar posters AND torrent-table thumbnails alike.
    * =======================================================================*/
-  const PLACEHOLDER_IDS = ['hIq9qAn', 'qHx6IsI', '55K4Dww']; // No Banner / No Poster / No Fan Art
+  const PLACEHOLDER_IDS = ['hIq9qAn', 'qHx6IsI', '55K4Dww']; // shared imgur No Banner / No Poster / No Fan Art
+  // BTN's own default artwork (used in Last 5 Uploads / Snatches etc.), matched by URL fragment.
+  const PLACEHOLDER_URLS = ['/common/posters/noposter', '/noposter.', '/nobanner.', '/noartwork', 'no_poster', 'no-image', 'noimage'];
   const PH_C = { bg1: '#141821', bg2: '#0a0c10', line: '#2b313b', accent: '#1f9dff', accentB: '#3fc8ff', text: '#e8edf4', muted: '#7d8794' };
 
   function phIsDefault(src) {
     if (!src) return false;
-    return PLACEHOLDER_IDS.some(id => src.indexOf('/' + id) !== -1);
+    if (PLACEHOLDER_IDS.some(id => src.indexOf('/' + id) !== -1)) return true;
+    const low = src.toLowerCase();
+    return PLACEHOLDER_URLS.some(u => low.indexOf(u) !== -1);
   }
   function phWrap(t, maxChars, maxLines) {
     const words = (t || '').replace(/\s*\(\d{4}\)\s*$/, '').split(/\s+/).filter(Boolean);
