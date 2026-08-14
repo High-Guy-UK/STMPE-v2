@@ -986,3 +986,27 @@ body#torrents #content .thin>.main_column{grid-column:2;grid-row:3;align-self:st
   display:block; margin:0 auto !important;
   border-radius:8px; box-shadow:0 24px 80px rgba(0,0,0,.75);
 }
+
+/* ---------------------------------------------------------------------------
+   BBCode comment / reply editor (Gazelle rounded-box variant, used site-wide:
+   profile "Leave a comment", forum quick-reply, PM compose, torrent comments).
+   The stock widget renders on white; recolour the rounded-corner slices,
+   toolbar strip, content area and smiley strip to the dark theme.
+   --------------------------------------------------------------------------- */
+.bbcodetextbox b.b2h,.bbcodetextbox b.b3h,.bbcodetextbox b.b4h,
+.bbcodetextbox b.b2bh,.bbcodetextbox b.b3bh,.bbcodetextbox b.b4bh{
+  background:var(--bg-2) !important; border-color:var(--line-2) !important;
+}
+.bbcodetextbox b.b1h,.bbcodetextbox b.b1bh{
+  background:var(--line-2) !important;
+}
+.bbcodetextbox .headh{
+  background:var(--bg-3) !important; border-color:var(--line-2) !important;
+}
+.bbcodetextbox .contenth{
+  background:var(--bg-2) !important; border-color:var(--line-2) !important;
+}
+.bbcodetextbox .bbcode-btntoolbar,
+.bbcodetextbox .bbcode-smileys{
+  background:transparent !important; border-color:var(--line) !important;
+}
