@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         STMPE-Enriched
 // @namespace    https://broadcasthe.net/
-// @version      1.11.1
+// @version      1.11.2
 // @description  A combination of userscripts that enrich the TV series experience, all managed from one panel on your profile settings page. Features: Sonarr Integration, Fanart.tv Logo, IMDb Parents Guide, Trending Shows, Artwork Placeholders, Hide Empty Requests, Collapse Old Seasons, Trailer Player (fixed), Cast Row (TMDb), Enhanced Series Summary, Stamps Row, and Fan Art Carousels.
 // @author       Prism16
 // @match        *://broadcasthe.net/*
@@ -1334,7 +1334,7 @@
       #btn-parents-guide .pg-cert { font-size:11px; font-weight:700; letter-spacing:.3px; border:1px solid currentColor; border-radius:3px; padding:0 5px; opacity:.85; }
       #btn-parents-guide .pg-overall { font-size:11px; font-weight:700; color:#0e0e0e; border-radius:3px; padding:1px 6px; }
       #btn-parents-guide .pg-src { font-size:10px; font-weight:600; opacity:.55; border:1px solid rgba(255,255,255,.2); border-radius:3px; padding:0 5px; }
-      #btn-parents-guide .pg-body { display:grid; grid-template-columns:repeat(auto-fit, minmax(240px, 1fr)); gap:10px; align-items:start; padding:12px; }
+      #btn-parents-guide .pg-body { display:grid; grid-template-columns:repeat(auto-fit, minmax(180px, 1fr)); gap:10px; align-items:start; padding:12px; }
       #btn-parents-guide .pg-status { grid-column:1 / -1; padding:6px 2px; opacity:.85; font-size:12px; }
       #btn-parents-guide .pg-error { color:#ff8a80; }
       #btn-parents-guide .pg-retry { cursor:pointer; font:inherit; font-size:11px; padding:3px 10px; border-radius:4px; border:1px solid rgba(255,255,255,.25); background:rgba(255,255,255,.06); color:inherit; justify-self:start; }
